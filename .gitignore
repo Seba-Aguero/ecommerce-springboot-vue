@@ -1,0 +1,28 @@
+# Root level gitignore
+.DS_Store
+.env
+.vscode/
+.idea/
+
+# Backend specific
+backend/target/
+backend/*.env
+backend/application-*.properties
+backend/logs/
+
+# Frontend specific
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.*
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# IDE
+*.iml
+*.iws
+*.ipr
+.project
+.settings
+.classpath
