@@ -1,0 +1,228 @@
+<template>
+  <AuthCard>
+    <div class="flex items-center justify-center mb-8">
+      <ShoppingBag class="h-12 w-12 text-primary-500" />
+      <h1
+        class="text-3xl font-bold ml-2 bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-purple-600"
+      >
+        My Ecommerce
+      </h1>
+    </div>
+
+    <form @submit.prevent="handleRegister" class="mt-8 space-y-6">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label
+            for="firstName"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-1"
+          >
+            First Name
+          </label>
+          <div class="relative">
+            <input
+              id="firstName"
+              v-model="firstName"
+              type="text"
+              class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              required
+            />
+            <User
+              class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+            />
+          </div>
+        </div>
+        <div>
+          <label
+            for="lastName"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-1"
+          >
+            Last Name
+          </label>
+          <div class="relative">
+            <input
+              id="lastName"
+              v-model="lastName"
+              type="text"
+              class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              required
+            />
+            <User
+              class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label
+          for="email"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-1"
+        >
+          Email
+        </label>
+        <div class="relative">
+          <input
+            id="email"
+            v-model="email"
+            type="email"
+            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            placeholder="tu@email.com"
+            required
+          />
+          <Mail
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label
+          for="password"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-1"
+        >
+          Contraseña
+        </label>
+        <div class="relative">
+          <input
+            id="password"
+            v-model="password"
+            type="password"
+            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            placeholder="••••••••"
+            required
+          />
+          <Lock
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label
+          for="confirmPassword"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-1"
+        >
+          Confirmar contraseña
+        </label>
+        <div class="relative">
+          <input
+            id="confirmPassword"
+            v-model="confirmPassword"
+            type="password"
+            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            placeholder="••••••••"
+            required
+          />
+          <Lock
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+          />
+        </div>
+      </div>
+
+      <div class="flex items-center">
+        <input
+          id="terms"
+          type="checkbox"
+          required
+          class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+        />
+        <label
+          for="terms"
+          class="ml-2 block text-sm text-gray-700 dark:text-gray-100"
+        >
+          I agree to the
+          <a
+            href="#"
+            class="font-medium text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 transition duration-300 ease-in-out"
+          >
+            Terms and Conditions
+          </a>
+        </label>
+      </div>
+
+      <div>
+        <button
+          type="submit"
+          :disabled="loading || password !== confirmPassword"
+          class="w-full bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center disabled:opacity-50"
+        >
+          <svg
+            v-if="loading"
+            class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            />
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
+          </svg>
+          {{ loading ? "Creating Account..." : "Create Account" }}
+          <ArrowRight v-if="!loading" class="ml-2 h-5 w-5" />
+        </button>
+      </div>
+
+      <div class="text-center">
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+          Already have an account?
+          <router-link
+            to="/login"
+            class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 ml-2"
+          >
+            Sign In
+          </router-link>
+        </p>
+      </div>
+    </form>
+  </AuthCard>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/authStore";
+import { ShoppingBag, Mail, Lock, ArrowRight, User } from "lucide-vue-next";
+import AuthCard from "@/components/auth/AuthCard.vue";
+
+const router = useRouter();
+const authStore = useAuthStore();
+
+const firstName = ref("");
+const lastName = ref("");
+const email = ref("");
+const password = ref("");
+const confirmPassword = ref("");
+const loading = ref(false);
+
+const handleRegister = async () => {
+  if (password.value !== confirmPassword.value) {
+    return;
+  }
+
+  loading.value = true;
+  try {
+    await authStore.register({
+      firstName: firstName.value,
+      lastName: lastName.value,
+      email: email.value,
+      password: password.value,
+    });
+    router.push("/");
+  } catch (error) {
+    console.error("Error al registrarse:", error);
+    // Aquí podrías mostrar un mensaje de error al usuario
+  } finally {
+    loading.value = false;
+  }
+};
+</script>
