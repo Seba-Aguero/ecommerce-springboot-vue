@@ -80,20 +80,27 @@
           for="password"
           class="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-1"
         >
-          Contraseña
+          Password
         </label>
         <div class="relative">
           <input
             id="password"
             v-model="password"
-            type="password"
-            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            placeholder="••••••••"
+            :type="showPassword ? 'text' : 'password'"
+            class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             required
           />
           <Lock
             class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
           />
+          <button
+            type="button"
+            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            @click="showPassword = !showPassword"
+          >
+            <Eye v-if="!showPassword" class="h-5 w-5" />
+            <EyeOff v-else class="h-5 w-5" />
+          </button>
         </div>
       </div>
 
@@ -102,21 +109,34 @@
           for="confirmPassword"
           class="block text-sm font-medium text-gray-700 dark:text-gray-100 mb-1"
         >
-          Confirmar contraseña
+          Confirm Password
         </label>
         <div class="relative">
           <input
             id="confirmPassword"
             v-model="confirmPassword"
-            type="password"
-            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            placeholder="••••••••"
+            :type="showConfirmPassword ? 'text' : 'password'"
+            class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             required
           />
           <Lock
             class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
           />
+          <button
+            type="button"
+            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            @click="showConfirmPassword = !showConfirmPassword"
+          >
+            <Eye v-if="!showConfirmPassword" class="h-5 w-5" />
+            <EyeOff v-else class="h-5 w-5" />
+          </button>
         </div>
+        <p
+          v-if="password && confirmPassword && password !== confirmPassword"
+          class="mt-1 text-sm text-red-500"
+        >
+          Passwords do not match
+        </p>
       </div>
 
       <div class="flex items-center">
@@ -143,7 +163,10 @@
       <div>
         <button
           type="submit"
-          :disabled="loading || password !== confirmPassword"
+          :disabled="
+            loading ||
+            (password && confirmPassword && password !== confirmPassword)
+          "
           class="w-full bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center disabled:opacity-50"
         >
           <svg
@@ -179,7 +202,7 @@
             to="/login"
             class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 ml-2"
           >
-            Sign In
+            Log In
           </router-link>
         </p>
       </div>
@@ -190,37 +213,44 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/authStore";
-import { ShoppingBag, Mail, Lock, ArrowRight, User } from "lucide-vue-next";
+import { authService } from "@/services/authService";
+import {
+  ShoppingBag,
+  Mail,
+  Lock,
+  ArrowRight,
+  User,
+  Eye,
+  EyeOff,
+} from "lucide-vue-next";
 import AuthCard from "@/components/auth/AuthCard.vue";
+import { useToast } from "vue-toastification";
 
 const router = useRouter();
-const authStore = useAuthStore();
-
+const toast = useToast();
 const firstName = ref("");
 const lastName = ref("");
 const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 const loading = ref(false);
+const error = ref("");
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
 
 const handleRegister = async () => {
-  if (password.value !== confirmPassword.value) {
-    return;
-  }
-
   loading.value = true;
+  error.value = ""; // Reset error message
   try {
-    await authStore.register({
-      firstName: firstName.value,
-      lastName: lastName.value,
+    await authService.register({
       email: email.value,
       password: password.value,
+      confirmPassword: confirmPassword.value,
     });
-    router.push("/");
-  } catch (error) {
-    console.error("Error al registrarse:", error);
-    // Aquí podrías mostrar un mensaje de error al usuario
+    router.push("/confirm-email");
+  } catch (e) {
+    error.value = e.message || "Registration failed";
+    toast.error(error.value);
   } finally {
     loading.value = false;
   }

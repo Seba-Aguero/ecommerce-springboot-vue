@@ -8,9 +8,9 @@ export const useAuthStore = defineStore("auth", {
   }),
 
   getters: {
-    isAuthenticated: (state) => !!state.token,
-    userEmail: (state) => state.user ? state.user.email : "",
-    userRole: (state) => state.user ? state.user.role : "",
+    isAuthenticated: (state) => (state.token ? true : false),
+    userEmail: (state) => (state.user ? state.user.email : ""),
+    userRole: (state) => (state.user ? state.user.role : ""),
   },
 
   actions: {
@@ -28,20 +28,16 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async register(userData) {
+      console.log("Sending registration data:", userData);
       try {
         const response = await api.post("/api/v1/auth/register", userData);
-        // The backend returns UserDto which contains id, email and role
         this.user = response.data;
-
-        // Need to login after registration to get the token
-        await this.login({
-          email: userData.email,
-          password: userData.password
-        });
-
+        sessionStorage.setItem("temp_password", userData.password);
         return true;
       } catch (error) {
-        console.error("Register error:", error);
+        if (error.response?.data?.message) {
+          throw new Error(error.response.data.message);
+        }
         throw error;
       }
     },

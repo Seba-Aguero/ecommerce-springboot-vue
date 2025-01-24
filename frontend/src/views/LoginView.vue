@@ -105,7 +105,7 @@
             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
           />
         </svg>
-        {{ loading ? "Signing in..." : "Sign In" }}
+        {{ loading ? "Logging in..." : "Log In" }}
         <ArrowRight v-if="!loading" class="ml-2 h-5 w-5" />
       </button>
 
@@ -127,28 +127,33 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/authStore";
+import { useToast } from "vue-toastification";
+import { authService } from "@/services/authService";
 import { ShoppingBag, Mail, Lock, ArrowRight } from "lucide-vue-next";
 import AuthCard from "@/components/auth/AuthCard.vue";
 
 const router = useRouter();
-const authStore = useAuthStore();
-
 const email = ref("");
 const password = ref("");
 const loading = ref(false);
+const toast = useToast();
 
 const handleLogin = async () => {
   loading.value = true;
   try {
-    await authStore.login({
+    await authService.login({
       email: email.value,
       password: password.value,
     });
-    router.push("/");
+    toast.success("Login successful! Redirecting...", {
+      timeout: 2000,
+      onClose: () => {
+        router.push("/");
+      },
+    });
   } catch (error) {
-    console.error("Error al iniciar sesión:", error);
-    // Aquí podrías mostrar un mensaje de error al usuario
+    console.error(error.message);
+    toast.error(error.message);
   } finally {
     loading.value = false;
   }

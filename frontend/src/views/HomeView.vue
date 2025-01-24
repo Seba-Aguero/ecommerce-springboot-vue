@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen bg-gradient-to-br from-primary-100 to-purple-100 dark:from-gray-800 dark:to-gray-900"
+    class="min-h-screen bg-gradient-to-br from-primary-100 to-purple-100 dark:from-gray-900 dark:to-gray-900"
   >
     <!-- Hero Section -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -190,12 +190,9 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useProductStore } from "@/stores/productStore";
-import { useCartStore } from "@/stores/cartStore";
+import { productService } from "@/services/productService";
 import { Truck, ShieldCheck, Headphones, Mail, Phone } from "lucide-vue-next";
 
-const productStore = useProductStore();
-const cartStore = useCartStore();
 const featuredProducts = ref([]);
 
 const formatPrice = (price) => {
@@ -203,17 +200,25 @@ const formatPrice = (price) => {
 };
 
 const handleImageError = (event) => {
-  event.target.src = "/placeholder-image.jpg"; // Asegúrate de tener una imagen de placeholder
+  event.target.src = "/placeholder-image.jpg";
 };
 
-const addToCart = (product) => {
-  cartStore.addToCart(product);
-  // Aquí podrías agregar una notificación de éxito
+const addToCart = async (product) => {
+  try {
+    await productService.addToCart(product);
+    // Here can be added a success message or notification
+  } catch (error) {
+    console.error(error.message);
+    // Here can be added a error message or notification
+  }
 };
 
 onMounted(async () => {
-  await productStore.fetchProducts();
-  // Tomamos los primeros 4 productos como destacados
-  featuredProducts.value = productStore.products.slice(0, 4);
+  try {
+    const products = await productService.fetchProducts();
+    featuredProducts.value = products.slice(0, 4);
+  } catch (error) {
+    console.error(error.message);
+  }
 });
 </script>

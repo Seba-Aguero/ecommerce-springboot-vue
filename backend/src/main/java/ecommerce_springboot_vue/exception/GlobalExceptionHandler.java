@@ -60,6 +60,20 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(errorDetails, errorDetails.getStatus());
   }
 
+  @ExceptionHandler(IllegalStateException.class)
+  public ResponseEntity<ErrorDetails> handleIllegalStateException(
+    IllegalStateException ex,
+    WebRequest request)
+  {
+    ErrorDetails errorDetails = new ErrorDetails(
+      HttpStatus.BAD_REQUEST,
+      ex.getMessage(),
+      request.getDescription(false),
+      null
+    );
+    return new ResponseEntity<>(errorDetails, errorDetails.getStatus());
+  }
+
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorDetails> handleAllExceptions( // Manage all other exceptions
     Exception ex,

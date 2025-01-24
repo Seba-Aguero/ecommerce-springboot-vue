@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
+import ConfirmEmailView from "@/views/ConfirmEmailView.vue";
 
 const routes = [
   {
@@ -44,6 +45,11 @@ const routes = [
   //   component: () => import("@/views/ProfileView.vue"),
   //   meta: { requiresAuth: true },
   // },
+  {
+    path: "/confirm-email",
+    name: "ConfirmEmail",
+    component: ConfirmEmailView,
+  },
 ];
 
 const router = createRouter({
@@ -55,9 +61,9 @@ router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-      next("/login");
+    next("/login");
   } else {
-      next();
+    next();
   }
 });
 

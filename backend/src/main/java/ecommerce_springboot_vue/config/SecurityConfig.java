@@ -45,7 +45,6 @@ public class SecurityConfig {
       )
       .headers(headers -> headers
         .frameOptions(HeadersConfigurer.FrameOptionsConfig::deny) //Prevents clickjacking attacks
-        .contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'")) ////Defines what resources are allowed to load
       )
       .authorizeHttpRequests(auth -> auth
         .requestMatchers(
@@ -65,7 +64,7 @@ public class SecurityConfig {
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // Frontend URL
+    configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:5174")); // Frontend ports
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList("*"));
     configuration.setExposedHeaders(Arrays.asList("Authorization"));

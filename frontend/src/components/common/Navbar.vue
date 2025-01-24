@@ -1,25 +1,21 @@
 <template>
-  <nav class="bg-white dark:bg-gray-800 shadow-md">
+  <nav class="bg-slate-50 dark:bg-gray-800 shadow-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <!-- Logo -->
         <div class="flex items-center">
           <router-link to="/" class="flex items-center">
             <ShoppingBag class="h-8 w-8 text-primary-500" />
-            <span class="ml-2 text-2xl font-bold text-gray-800 dark:text-white"
-              >My Ecommerce</span
+            <span
+              class="ml-2 text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-purple-600"
             >
+              My Ecommerce
+            </span>
           </router-link>
         </div>
 
         <!-- Desktop Menu -->
         <div class="hidden md:flex md:items-center">
-          <router-link
-            to="/products"
-            class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium"
-          >
-            Products
-          </router-link>
 
           <!-- Theme Toggle Button -->
           <button
@@ -58,7 +54,7 @@
 
             <div
               v-show="isMenuOpen"
-              class="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5"
+              class="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-slate-50 dark:bg-gray-700 ring-1 ring-black ring-opacity-5"
             >
               <router-link
                 to="/profile"
@@ -80,7 +76,7 @@
           <div v-else class="ml-4 flex items-center space-x-4">
             <router-link
               to="/login"
-              class="px-4 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-white border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              class="px-4 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-white border border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
             >
               Log In
             </router-link>
@@ -107,7 +103,7 @@
 
           <router-link
             to="/cart"
-            class="text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-white px-3 py-2 rounded-md relative mr-2"
+            class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md relative mr-2"
           >
             <ShoppingCart class="h-5 w-5 no-transition" />
             <span
@@ -133,13 +129,6 @@
     <!-- Mobile menu -->
     <div v-show="isMobileMenuOpen" class="md:hidden">
       <div class="px-2 pt-2 pb-3 space-y-1">
-        <router-link
-          to="/products"
-          class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
-          @click="isMobileMenuOpen = false"
-        >
-          Products
-        </router-link>
 
         <!-- Mobile Auth Menu -->
         <template v-if="authStore.isAuthenticated">
@@ -181,11 +170,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 import { useCartStore } from "@/stores/cartStore";
 import { useThemeStore } from "@/stores/themeStore";
+import { authService } from "@/services/authService";
+import { themeService } from "@/services/themeService";
 import {
   ShoppingBag,
   ShoppingCart,
@@ -203,10 +194,10 @@ const isMenuOpen = ref(false);
 const isMobileMenuOpen = ref(false);
 const themeStore = useThemeStore();
 
-const isDark = ref(false);
+const isDark = computed(() => themeService.getTheme());
 
 const toggleTheme = () => {
-  themeStore.toggleTheme();
+  themeService.toggleTheme();
 };
 
 onMounted(() => {
@@ -214,9 +205,13 @@ onMounted(() => {
 });
 
 const handleLogout = async () => {
-  await authStore.logout();
-  isMenuOpen.value = false;
-  router.push("/login");
+  try {
+    await authService.logout();
+    isMenuOpen.value = false;
+    router.push("/login");
+  } catch (error) {
+    console.error(error.message);
+  }
 };
 
 const handleMobileLogout = async () => {

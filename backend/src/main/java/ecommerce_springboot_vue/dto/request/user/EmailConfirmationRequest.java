@@ -18,4 +18,7 @@ public class EmailConfirmationRequest {
 
     @NotBlank(message = "Confirmation code is required")
     private String confirmationCode;
+
+    @NotBlank(message = "Password is required")
+    private String password;
 }

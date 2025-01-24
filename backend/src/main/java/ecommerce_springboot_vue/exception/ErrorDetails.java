@@ -15,7 +15,7 @@ public class ErrorDetails {
 
   private String message;
 
-  private String path;
+  private String details;
 
   private List<String> errors;
 }
