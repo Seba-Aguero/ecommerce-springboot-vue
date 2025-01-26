@@ -35,5 +35,7 @@ public class ProductDto {
   @PositiveOrZero(message = "Price can not be negative")
   private BigDecimal price;
 
+  private String imageUrl;
+
   private Set<CategoryDto> categories;
 }

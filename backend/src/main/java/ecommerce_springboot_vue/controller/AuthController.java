@@ -82,21 +82,4 @@ public class AuthController {
     return ResponseEntity.ok(authResponse);
   }
 
-  @GetMapping("/user/role")
-  @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<String> getUserRole() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String email = authentication.getName();
-    User user = userService.getUserByEmail(email);
-    String role = String.valueOf(user.getRole());
-    return ResponseEntity.ok(role);
-  }
-
-  @GetMapping("/user/{id}")
-  @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<String> getUserEmailById(@PathVariable Long id) {
-    User user = userService.getUserById(id);
-    return ResponseEntity.ok(user.getEmail());
-  }
-
 }

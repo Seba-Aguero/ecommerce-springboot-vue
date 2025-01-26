@@ -1,5 +1,6 @@
 package ecommerce_springboot_vue.dto;
 
+import ecommerce_springboot_vue.entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -18,5 +19,5 @@ public class UserDto {
   @Email(message = "Invalid email format")
   private String email;
 
-  private String role;
+  private User.Role role;
 }

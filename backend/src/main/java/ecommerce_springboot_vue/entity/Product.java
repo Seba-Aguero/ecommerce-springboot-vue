@@ -1,10 +1,13 @@
 package ecommerce_springboot_vue.entity;
 
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Builder.Default;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,7 +18,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,7 +32,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString(exclude = "categories")
+@EqualsAndHashCode(exclude = "categories")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -61,7 +66,7 @@ public class Product {
     private String imageUrl;
 
     @Default
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "product_category",
         joinColumns = @JoinColumn(name = "product_id"),
