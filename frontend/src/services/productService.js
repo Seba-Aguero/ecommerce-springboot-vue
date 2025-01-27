@@ -5,8 +5,9 @@ export const productService = {
   async fetchProducts(filters = {}) {
     const productStore = useProductStore();
     try {
-      const products = await productStore.fetchProducts();
-      return products;
+      const response = await productStore.fetchProducts();
+      // Extract the products from the response
+      return response.content;
     } catch (error) {
       throw new Error("Error fetching products: " + error.message);
     }
@@ -15,7 +16,7 @@ export const productService = {
   async addToCart(product) {
     const cartStore = useCartStore();
     try {
-      if (!product.stock) {
+      if (!product.quantity || product.quantity <= 0) {
         throw new Error("Product out of stock");
       }
       await cartStore.addToCart(product);

@@ -13,6 +13,8 @@ export const useProductStore = defineStore("products", {
       maxPrice: null,
       search: "",
     },
+    totalPages: 0,
+    totalElements: 0,
   }),
 
   getters: {
@@ -68,10 +70,14 @@ export const useProductStore = defineStore("products", {
     async fetchProducts() {
       this.loading = true;
       try {
-        const response = await api.get("/products");
-        this.products = response.data;
+        const response = await api.get("/api/v1/products");
+        this.products = response.data.content;
+        this.totalPages = response.data.totalPages;
+        this.totalElements = response.data.totalElements;
+        return response.data;
       } catch (error) {
         this.error = error.message;
+        throw error;
       } finally {
         this.loading = false;
       }
@@ -100,7 +106,7 @@ export const useProductStore = defineStore("products", {
 
     clearFilters() {
       this.filters = {
-        category: null,
+        categories: [],
         minPrice: null,
         maxPrice: null,
         search: "",

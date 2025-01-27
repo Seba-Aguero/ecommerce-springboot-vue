@@ -32,8 +32,6 @@ export const authService = {
   },
 
   async confirmEmail(data) {
-    console.log(data);
-    const authStore = useAuthStore();
     try {
       await api.post("/api/v1/auth/confirm-email", data);
       return true;

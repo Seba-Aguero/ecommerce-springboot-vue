@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
-import ConfirmEmailView from "@/views/ConfirmEmailView.vue";
 
 const routes = [
   {
@@ -8,11 +7,11 @@ const routes = [
     name: "home",
     component: () => import("@/views/HomeView.vue"),
   },
-  // {
-  //   path: "/products",
-  //   name: "products",
-  //   component: () => import("@/views/ProductsView.vue"),
-  // },
+  {
+    path: "/products",
+    name: "products",
+    component: () => import("@/views/ProductsView.vue"),
+  },
   // {
   //   path: "/products/:id",
   //   name: "product-detail",
@@ -48,7 +47,7 @@ const routes = [
   {
     path: "/confirm-email",
     name: "ConfirmEmail",
-    component: ConfirmEmailView,
+    component: () => import("@/views/ConfirmEmailView.vue"),
   },
 ];
 

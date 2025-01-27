@@ -20,7 +20,7 @@
           <!-- Theme Toggle Button -->
           <button
             @click="toggleTheme"
-            class="p-2 text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 rounded-full transition-colors duration-200"
+            class="p-3 text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 rounded-full transition-colors duration-200"
             :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
           >
             <Sun v-if="isDark" class="h-5 w-5 no-transition" />

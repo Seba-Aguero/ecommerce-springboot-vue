@@ -28,7 +28,6 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async register(userData) {
-      console.log("Sending registration data:", userData);
       try {
         const response = await api.post("/api/v1/auth/register", userData);
         this.user = response.data;
@@ -50,7 +49,7 @@ export const useAuthStore = defineStore("auth", {
 
     async fetchUserProfile() {
       try {
-        const response = await api.get("/users/profile");
+        const response = await api.get("/api/v1/users/profile");
         this.user = response.data;
       } catch (error) {
         console.error("Fetch profile error:", error);
