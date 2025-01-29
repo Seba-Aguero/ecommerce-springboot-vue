@@ -167,31 +167,13 @@
             loading ||
             (password && confirmPassword && password !== confirmPassword)
           "
-          class="w-full bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center disabled:opacity-50"
+          class="w-full bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 text-white font-semibold py-3 px-6 rounded-md transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center disabled:opacity-50"
         >
-          <svg
-            v-if="loading"
-            class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              class="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              stroke-width="4"
-            />
-            <path
-              class="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            />
-          </svg>
-          {{ loading ? "Creating Account..." : "Create Account" }}
-          <ArrowRight v-if="!loading" class="ml-2 h-5 w-5" />
+          <ButtonSpinner v-if="loading"> Creating Account... </ButtonSpinner>
+          <span class="flex items-center" v-else>
+            Create Account
+            <ArrowRight class="ml-2 h-5 w-5" />
+          </span>
         </button>
       </div>
 
@@ -225,6 +207,7 @@ import {
 } from "lucide-vue-next";
 import AuthCard from "@/components/auth/AuthCard.vue";
 import { useToast } from "vue-toastification";
+import ButtonSpinner from "@/components/common/ButtonSpinner.vue";
 
 const router = useRouter();
 const toast = useToast();

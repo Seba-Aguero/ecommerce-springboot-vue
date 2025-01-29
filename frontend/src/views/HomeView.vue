@@ -98,7 +98,7 @@
       </div>
     </div>
 
-    <!-- Products Preview Section -->
+    <!-- Featured Products Section -->
     <div id="products" class="py-12 bg-gray-50 dark:bg-gray-900">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2
@@ -106,50 +106,19 @@
         >
           Featured Products
         </h2>
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <div
+
+        <LoadingSpinner v-if="loading" size="lg" />
+
+        <div
+          v-else
+          class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
+        >
+          <ProductCard
             v-for="product in featuredProducts"
             :key="product.id"
-            class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg rounded-lg transition-transform duration-300 hover:scale-105"
-          >
-            <div class="flex flex-col h-full p-5">
-              <div class="flex-shrink-0">
-                <div
-                  class="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700"
-                >
-                  <img
-                    :src="product.image"
-                    :alt="product.name"
-                    class="h-48 w-full object-cover object-center"
-                    @error="handleImageError"
-                  />
-                </div>
-              </div>
-              <div class="flex flex-col flex-grow mt-4">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-white">
-                  {{ product.name }}
-                </h3>
-                <p
-                  class="mt-2 text-sm text-gray-500 dark:text-gray-400 line-clamp-2 flex-grow"
-                >
-                  {{ product.description }}
-                </p>
-                <div class="mt-4">
-                  <p
-                    class="text-lg font-semibold text-primary-600 dark:text-primary-400"
-                  >
-                    ${{ formatPrice(product.price) }}
-                  </p>
-                  <button
-                    @click="addToCart(product)"
-                    class="mt-3 w-full bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 text-white font-medium py-2 px-4 rounded-md transition duration-300"
-                  >
-                    Add to Cart
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+            :product="product"
+            @add-to-cart="addToCart"
+          />
         </div>
       </div>
     </div>
@@ -192,16 +161,11 @@
 import { ref, onMounted } from "vue";
 import { productService } from "@/services/productService";
 import { Truck, ShieldCheck, Headphones, Mail, Phone } from "lucide-vue-next";
+import ProductCard from "@/components/products/ProductCard.vue";
+import LoadingSpinner from "@/components/common/LoadingSpinner.vue";
 
 const featuredProducts = ref([]);
-
-const formatPrice = (price) => {
-  return price.toFixed(2);
-};
-
-const handleImageError = (event) => {
-  event.target.src = "/placeholder-image.jpg";
-};
+const loading = ref(false);
 
 const addToCart = async (product) => {
   try {
@@ -214,11 +178,14 @@ const addToCart = async (product) => {
 };
 
 onMounted(async () => {
+  loading.value = true;
   try {
     const products = await productService.fetchProducts();
     featuredProducts.value = products.slice(0, 4);
   } catch (error) {
     console.error(error.message);
+  } finally {
+    loading.value = false;
   }
 });
 </script>

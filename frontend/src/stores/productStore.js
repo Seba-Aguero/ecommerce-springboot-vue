@@ -76,7 +76,7 @@ export const useProductStore = defineStore("products", {
         this.totalElements = response.data.totalElements;
         return response.data;
       } catch (error) {
-        this.error = error.message;
+        this.error = error.response?.data?.message || error.message;
         throw error;
       } finally {
         this.loading = false;
@@ -86,10 +86,10 @@ export const useProductStore = defineStore("products", {
     async fetchProductById(id) {
       this.loading = true;
       try {
-        const response = await api.get(`/products/${id}`);
+        const response = await api.get(`/api/v1/products/${id}`);
         this.currentProduct = response.data;
       } catch (error) {
-        this.error = error.message;
+        this.error = error.response?.data?.message || error.message;
       } finally {
         this.loading = false;
       }
