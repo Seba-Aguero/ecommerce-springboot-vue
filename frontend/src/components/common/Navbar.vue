@@ -4,7 +4,7 @@
       <div class="flex justify-between h-16">
         <!-- Logo -->
         <div class="flex items-center">
-          <router-link to="/" class="flex items-center">
+          <router-link to="/" class="flex items-center" aria-label="Home">
             <ShoppingBag class="h-8 w-8 text-primary-500" />
             <span
               class="ml-2 text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-purple-600"
@@ -22,6 +22,7 @@
             @click="toggleTheme"
             class="p-3 text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 rounded-full transition-colors duration-200"
             :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+            aria-label="Toggle Theme"
           >
             <Sun v-if="isDark" class="h-5 w-5 no-transition" />
             <Moon v-else class="h-5 w-5 no-transition" />
@@ -32,6 +33,7 @@
             to="/cart"
             class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium relative"
             title="Cart"
+            aria-label="Cart"
           >
             <ShoppingCart class="h-5 w-5 inline-block no-transition" />
             <span
@@ -47,6 +49,7 @@
             <button
               @click="isMenuOpen = !isMenuOpen"
               class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium flex items-center"
+              aria-label="User Menu"
             >
               <User class="h-5 w-5 mr-1 no-transition" />
               {{ authStore.userFullName }}
@@ -60,12 +63,14 @@
                 to="/profile"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600"
                 @click="isMenuOpen = false"
+                aria-label="My Profile"
               >
                 My Profile
               </router-link>
               <button
                 @click="handleLogout"
                 class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600"
+                aria-label="Log Out"
               >
                 Log Out
               </button>
@@ -77,12 +82,14 @@
             <router-link
               to="/login"
               class="px-4 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-white border border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              aria-label="Log In"
             >
               Log In
             </router-link>
             <router-link
               to="/register"
               class="px-4 py-2 rounded-md text-sm font-medium text-white bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+              aria-label="Sign Up"
             >
               Sign Up
             </router-link>
@@ -96,6 +103,7 @@
             @click="toggleTheme"
             class="p-2 text-gray-500 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 rounded-full transition-colors duration-200 mr-2"
             :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+            aria-label="Toggle Theme"
           >
             <Sun v-if="isDark" class="h-5 w-5 no-transition" />
             <Moon v-else class="h-5 w-5 no-transition" />
@@ -104,6 +112,7 @@
           <router-link
             to="/cart"
             class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md relative mr-2"
+            aria-label="Cart"
           >
             <ShoppingCart class="h-5 w-5 no-transition" />
             <span
@@ -117,6 +126,7 @@
           <button
             @click="isMobileMenuOpen = !isMobileMenuOpen"
             class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
+            aria-label="Open main menu"
           >
             <span class="sr-only">Open main menu</span>
             <Menu v-if="!isMobileMenuOpen" class="block h-6 w-6" />
@@ -136,12 +146,14 @@
             to="/profile"
             class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
             @click="isMobileMenuOpen = false"
+            aria-label="My Profile"
           >
             My Profile
           </router-link>
           <button
             @click="handleMobileLogout"
             class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+            aria-label="Log Out"
           >
             Log Out
           </button>
@@ -153,6 +165,7 @@
             to="/login"
             class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
             @click="isMobileMenuOpen = false"
+            aria-label="Log In"
           >
             Log In
           </router-link>
@@ -160,6 +173,7 @@
             to="/register"
             class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
             @click="isMobileMenuOpen = false"
+            aria-label="Sign Up"
           >
             Sign Up
           </router-link>

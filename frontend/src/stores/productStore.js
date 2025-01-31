@@ -70,7 +70,23 @@ export const useProductStore = defineStore("products", {
     async fetchProducts() {
       this.loading = true;
       try {
-        const response = await api.get("/api/v1/products");
+        const params = new URLSearchParams();
+
+        // Add all filters to params
+        if (this.filters.categories.length > 0) {
+          params.append("categories", this.filters.categories.join(","));
+        }
+        if (this.filters.minPrice && this.filters.minPrice > 0) {
+          params.append("minPrice", this.filters.minPrice);
+        }
+        if (this.filters.maxPrice && this.filters.maxPrice > 0) {
+          params.append("maxPrice", this.filters.maxPrice);
+        }
+        if (this.filters.search) {
+          params.append("search", this.filters.search);
+        }
+
+        const response = await api.get(`/api/v1/products?${params}`);
         this.products = response.data.content;
         this.totalPages = response.data.totalPages;
         this.totalElements = response.data.totalElements;
@@ -104,22 +120,35 @@ export const useProductStore = defineStore("products", {
       };
     },
 
-    clearFilters() {
-      this.filters = {
-        categories: [],
-        minPrice: null,
-        maxPrice: null,
-        search: "",
-      };
+    async updatePriceRange(minPrice, maxPrice) {
+      this.filters.minPrice = minPrice || null;
+      this.filters.maxPrice = maxPrice || null;
+      await this.fetchProducts();
     },
 
-    toggleCategory(categoryId) {
+    async updateSearch(search) {
+      this.filters.search = search;
+      await this.fetchProducts();
+    },
+
+    async toggleCategory(categoryId) {
       const index = this.filters.categories.indexOf(categoryId);
       if (index === -1) {
         this.filters.categories.push(categoryId);
       } else {
         this.filters.categories.splice(index, 1);
       }
+      await this.fetchProducts();
+    },
+
+    async clearFilters() {
+      this.filters = {
+        categories: [],
+        minPrice: null,
+        maxPrice: null,
+        search: "",
+      };
+      await this.fetchProducts();
     },
   },
 });

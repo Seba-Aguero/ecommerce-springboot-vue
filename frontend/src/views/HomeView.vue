@@ -24,6 +24,7 @@
             <router-link
               to="/products"
               class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 md:py-4 md:text-lg md:px-10"
+              aria-label="Start Shopping"
             >
               Start Shopping
             </router-link>
@@ -51,7 +52,7 @@
         <div class="mt-10">
           <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
             <div class="flex flex-col items-center">
-              <Truck class="h-12 w-12 text-primary-500 dark:text-primary-400" />
+              <Truck class="h-12 w-12 text-primary-500 dark:text-primary-400" aria-hidden="true" />
               <h3
                 class="mt-6 text-xl font-medium text-gray-900 dark:text-white"
               >
@@ -66,6 +67,7 @@
             <div class="flex flex-col items-center">
               <ShieldCheck
                 class="h-12 w-12 text-primary-500 dark:text-primary-400"
+                aria-hidden="true"
               />
               <h3
                 class="mt-6 text-xl font-medium text-gray-900 dark:text-white"
@@ -81,6 +83,7 @@
             <div class="flex flex-col items-center">
               <Headphones
                 class="h-12 w-12 text-primary-500 dark:text-primary-400"
+                aria-hidden="true"
               />
               <h3
                 class="mt-6 text-xl font-medium text-gray-900 dark:text-white"
@@ -118,6 +121,7 @@
             :key="product.id"
             :product="product"
             @add-to-cart="addToCart"
+            aria-label="Product Card"
           />
         </div>
       </div>
@@ -140,16 +144,18 @@
           <a
             href="mailto:info@miecommerce.com"
             class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 transition duration-300"
+            aria-label="Send us an email"
           >
             Send us an email
-            <Mail class="ml-2 -mr-1 h-5 w-5" />
+            <Mail class="ml-2 -mr-1 h-5 w-5" aria-hidden="true" />
           </a>
           <a
             href="tel:+1234567890"
             class="inline-flex items-center justify-center px-5 py-3 border border-primary-500 dark:border-primary-400 text-base font-medium rounded-md text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-gray-700 transition duration-300"
+            aria-label="Call us"
           >
             Call us
-            <Phone class="ml-2 -mr-1 h-5 w-5" />
+            <Phone class="ml-2 -mr-1 h-5 w-5" aria-hidden="true" />
           </a>
         </div>
       </div>

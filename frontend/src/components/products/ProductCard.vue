@@ -12,6 +12,7 @@
             :alt="product.name"
             class="h-48 w-full object-cover object-center"
             @error="handleImageError"
+            aria-hidden="true"
           />
         </div>
       </div>
@@ -31,10 +32,11 @@
             ${{ formatPrice(product.price) }}
           </p>
           <button
-            @click="$emit('addToCart', product)"
+            @click="$emit('view-product', product.id)"
             class="mt-3 w-full bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 text-white font-medium py-2 px-4 rounded-md transition duration-300"
+            aria-label="View Product"
           >
-            Add to Cart
+            View Product
           </button>
         </div>
       </div>
