@@ -117,7 +117,7 @@ class ProductServiceTest {
     when(productRepository.findAll(any(Pageable.class))).thenReturn(productPage);
     when(productMapper.entityToDto(testProduct)).thenReturn(testProductDto);
 
-    Page<ProductDto> result = productService.getAllProducts(PageRequest.of(0, 10));
+    Page<ProductDto> result = productService.getAllProducts(null, null, null, null, PageRequest.of(0, 10));
 
     assertNotNull(result);
     assertEquals(1, result.getContent().size());

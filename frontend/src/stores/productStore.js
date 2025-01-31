@@ -15,6 +15,7 @@ export const useProductStore = defineStore("products", {
     },
     totalPages: 0,
     totalElements: 0,
+    currentPage: 0,
   }),
 
   getters: {
@@ -67,29 +68,37 @@ export const useProductStore = defineStore("products", {
   },
 
   actions: {
-    async fetchProducts() {
+    async fetchProducts( params = {} ) {
       this.loading = true;
       try {
-        const params = new URLSearchParams();
+        const queryParams = new URLSearchParams();
 
-        // Add all filters to params
+        // Add page and size to query params
+        queryParams.append("page", params.page || 0);
+        queryParams.append("size", 9);
+
+        // Add all filters to query params
         if (this.filters.categories.length > 0) {
-          params.append("categories", this.filters.categories.join(","));
+          queryParams.append("categories", this.filters.categories.join(","));
         }
         if (this.filters.minPrice && this.filters.minPrice > 0) {
-          params.append("minPrice", this.filters.minPrice);
+          queryParams.append("minPrice", this.filters.minPrice);
         }
         if (this.filters.maxPrice && this.filters.maxPrice > 0) {
-          params.append("maxPrice", this.filters.maxPrice);
+          queryParams.append("maxPrice", this.filters.maxPrice);
         }
         if (this.filters.search) {
-          params.append("search", this.filters.search);
+          queryParams.append("search", this.filters.search);
         }
 
-        const response = await api.get(`/api/v1/products?${params}`);
+        const response = await api.get(`/api/v1/products?${queryParams}`);
+
+        // Update the state with the fetched data
         this.products = response.data.content;
         this.totalPages = response.data.totalPages;
         this.totalElements = response.data.totalElements;
+        this.currentPage = response.data.number;
+
         return response.data;
       } catch (error) {
         this.error = error.response?.data?.message || error.message;

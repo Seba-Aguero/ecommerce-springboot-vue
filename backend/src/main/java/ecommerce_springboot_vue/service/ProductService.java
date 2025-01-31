@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -88,8 +90,39 @@ public class ProductService {
     productRepository.deleteById(id);
   }
 
-  public Page<ProductDto> getAllProducts(Pageable pageable) {
-    return productRepository.findAll(pageable)
+  public Page<ProductDto> getAllProducts(
+    List<Long> categories,
+    BigDecimal minPrice,
+    BigDecimal maxPrice,
+    String search,
+    Pageable pageable)
+  {
+    Specification<Product> spec = Specification.where(null);
+
+    if (categories != null && !categories.isEmpty()) {
+      spec = spec.and((root, query, cb) ->
+        root.join("categories").get("id").in(categories));
+    }
+
+    if (minPrice != null) {
+      spec = spec.and((root, query, cb) ->
+        cb.greaterThanOrEqualTo(root.get("price"), minPrice));
+    }
+
+    if (maxPrice != null) {
+      spec = spec.and((root, query, cb) ->
+        cb.lessThanOrEqualTo(root.get("price"), maxPrice));
+    }
+
+    if (search != null && !search.trim().isEmpty()) {
+      spec = spec.and((root, query, cb) ->
+        cb.or(
+          cb.like(cb.lower(root.get("name")), "%" + search.toLowerCase() + "%"),
+          cb.like(cb.lower(root.get("description")), "%" + search.toLowerCase() + "%")
+        ));
+    }
+
+    return productRepository.findAll(spec, pageable)
       .map(productMapper::entityToDto);
   }
 
