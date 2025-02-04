@@ -28,14 +28,14 @@ onMounted(async () => {
     try {
       await authStore.fetchUserProfile();
     } catch (error) {
-      console.error("Error al cargar el perfil:", error);
+      console.error("Error fetching user profile:", error);
     }
   }
 });
 </script>
 
 <style>
-/* Transiciones globales para el tema */
+/* Global transitions for theme */
 *,
 *::before,
 *::after {
@@ -45,12 +45,12 @@ onMounted(async () => {
   transition-duration: 300ms;
 }
 
-/* Excluir elementos que no deberían tener transición */
+/* Exclude elements that should not have transitions */
 .no-transition {
   transition: none !important;
 }
 
-/* Transición para las rutas */
+/* Transition for routes */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 200ms ease;

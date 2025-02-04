@@ -120,7 +120,7 @@
             v-for="product in featuredProducts"
             :key="product.id"
             :product="product"
-            @add-to-cart="addToCart"
+            @view-product="router.push({ name: 'ProductDetail', params: { id: product.id } })"
             aria-label="Product Card"
           />
         </div>
@@ -143,7 +143,7 @@
         <div class="mt-8 flex justify-center space-x-4">
           <a
             href="mailto:info@miecommerce.com"
-            class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 transition duration-300"
+            class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600"
             aria-label="Send us an email"
           >
             Send us an email
@@ -151,7 +151,7 @@
           </a>
           <a
             href="tel:+1234567890"
-            class="inline-flex items-center justify-center px-5 py-3 border border-primary-500 dark:border-primary-400 text-base font-medium rounded-md text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-gray-700 transition duration-300"
+            class="inline-flex items-center justify-center px-5 py-3 border border-primary-500 dark:border-primary-400 text-base font-medium rounded-md text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-gray-700"
             aria-label="Call us"
           >
             Call us
@@ -164,24 +164,16 @@
 </template>
 
 <script setup>
+import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import { productService } from "@/services/productService";
 import { Truck, ShieldCheck, Headphones, Mail, Phone } from "lucide-vue-next";
 import ProductCard from "@/components/products/ProductCard.vue";
 import LoadingSpinner from "@/components/common/LoadingSpinner.vue";
 
+const router = useRouter();
 const featuredProducts = ref([]);
 const loading = ref(false);
-
-const addToCart = async (product) => {
-  try {
-    await productService.addToCart(product);
-    // Here can be added a success message or notification
-  } catch (error) {
-    console.error(error.message);
-    // Here can be added a error message or notification
-  }
-};
 
 onMounted(async () => {
   loading.value = true;

@@ -1,28 +1,47 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
-import HomeView from "@/views/HomeView.vue";
-import ProductDetailView from "@/views/ProductDetailView.vue";
-import ProductsView from "@/views/ProductsView.vue";
-import LoginView from "@/views/LoginView.vue";
-import RegisterView from "@/views/RegisterView.vue";
-import ConfirmEmailView from "@/views/ConfirmEmailView.vue";
 
 const routes = [
   {
     path: "/",
     name: "home",
-    component: HomeView,
+    component: () => import("@/views/HomeView.vue"),
   },
   {
     path: "/products",
     name: "products",
-    component: ProductsView,
+    component: () => import("@/views/ProductsView.vue"),
   },
   {
     path: "/product/:id",
     name: "ProductDetail",
-    component: ProductDetailView,
+    component: () => import("@/views/ProductDetailView.vue"),
   },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import("@/views/LoginView.vue"),
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: () => import("@/views/RegisterView.vue"),
+  },
+  {
+    path: "/confirm-email",
+    name: "ConfirmEmail",
+    component: () => import("@/views/ConfirmEmailView.vue"),
+  },
+  // {
+  //   path: "/about",
+  //   name: "about",
+  //   component: () => import("@/views/AboutView.vue"),
+  // },
+  // {
+  //   path: "/contact",
+  //   name: "contact",
+  //   component: () => import("@/views/ContactView.vue"),
+  // },
   // {
   //   path: "/cart",
   //   name: "cart",
@@ -32,29 +51,7 @@ const routes = [
   //   path: "/checkout",
   //   name: "checkout",
   //   component: () => import("@/views/CheckoutView.vue"),
-  //   meta: { requiresAuth: true },
   // },
-  {
-    path: "/login",
-    name: "login",
-    component: LoginView,
-  },
-  {
-    path: "/register",
-    name: "register",
-    component: RegisterView,
-  },
-  // {
-  //   path: "/profile",
-  //   name: "profile",
-  //   component: () => import("@/views/ProfileView.vue"),
-  //   meta: { requiresAuth: true },
-  // },
-  {
-    path: "/confirm-email",
-    name: "ConfirmEmail",
-    component: ConfirmEmailView,
-  },
 ];
 
 const router = createRouter({

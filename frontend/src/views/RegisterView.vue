@@ -153,7 +153,7 @@
           I agree to the
           <a
             href="#"
-            class="font-medium text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 transition duration-300 ease-in-out"
+            class="font-medium text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300"
           >
             Terms and Conditions
           </a>

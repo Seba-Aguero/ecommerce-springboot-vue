@@ -15,12 +15,12 @@
         </div>
 
         <!-- Desktop Menu -->
-        <div class="hidden md:flex md:items-center">
+        <div class="hidden md:flex md:items-center gap-4">
 
           <!-- Theme Toggle Button -->
           <button
             @click="toggleTheme"
-            class="p-3 text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 rounded-full transition-colors duration-200"
+            class="p-3 text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 rounded-full"
             :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
             aria-label="Toggle Theme"
           >
@@ -30,6 +30,7 @@
 
           <!-- Cart -->
           <router-link
+            v-if="authStore.isAuthenticated"
             to="/cart"
             class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium relative"
             title="Cart"
@@ -45,7 +46,7 @@
           </router-link>
 
           <!-- Desktop Auth Menu -->
-          <div v-if="authStore.isAuthenticated" class="ml-4 relative">
+          <div v-if="authStore.isAuthenticated" class="relative">
             <button
               @click="isMenuOpen = !isMenuOpen"
               class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium flex items-center"
@@ -101,7 +102,7 @@
           <!-- Theme Toggle Button for Mobile -->
           <button
             @click="toggleTheme"
-            class="p-2 text-gray-500 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 rounded-full transition-colors duration-200 mr-2"
+            class="p-2 text-gray-500 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 rounded-full mr-2"
             :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
             aria-label="Toggle Theme"
           >

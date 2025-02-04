@@ -57,7 +57,7 @@
         <button
           type="submit"
           :disabled="loading || !confirmationCode"
-          class="w-full bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center disabled:opacity-50"
+          class="w-full bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-md ease-in-out transform hover:scale-105 flex items-center justify-center disabled:opacity-50"
         >
           <ButtonSpinner v-if="loading"> Verifying... </ButtonSpinner>
           <span v-else> Verify Email </span>

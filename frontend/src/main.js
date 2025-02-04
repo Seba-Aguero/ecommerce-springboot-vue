@@ -1,24 +1,19 @@
-import "@/assets/main.css";
-import Toast from "vue-toastification";
-import "vue-toastification/dist/index.css";
-
 import { createApp } from "vue";
 import { createPinia } from "pinia";
-
 import App from "@/App.vue";
 import router from "@/router";
+import Toast from "vue-toastification";
 import "@/assets/main.css";
+import "vue-toastification/dist/index.css";
+import "@brayamvalero/vue3-skeleton/dist/style.css";
 
 const app = createApp(App);
-
-// Vue DevTools
-app.config.devtools = false;
 
 app.use(createPinia());
 app.use(router);
 app.use(Toast, {
-  position: "top-right",
-  timeout: 3000,
+  position: "top-center",
+  timeout: 2500,
   closeOnClick: true,
   pauseOnFocusLoss: true,
   pauseOnHover: true,
