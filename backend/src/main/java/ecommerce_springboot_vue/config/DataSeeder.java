@@ -12,6 +12,7 @@ import ecommerce_springboot_vue.entity.User;
 import ecommerce_springboot_vue.repository.ICategoryRepository;
 import ecommerce_springboot_vue.repository.IProductRepository;
 import ecommerce_springboot_vue.repository.IUserRepository;
+import ecommerce_springboot_vue.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +31,7 @@ public class DataSeeder {
   private final ICategoryRepository categoryRepository;
   private final IProductRepository productRepository;
   private final IUserRepository userRepository;
+  private final AuthService authService;
   private final PasswordEncoder passwordEncoder;
 
   @Bean
@@ -376,8 +378,11 @@ public class DataSeeder {
       .emailConfirmation(true)
       .build();
 
-    List<User> users = Arrays.asList(admin, user1, user2);
-    userRepository.saveAll(users);
-    log.info("Users created successfully");
+    //Here I use the authService to register the users and create a cart for each one
+    authService.register(admin);
+    authService.register(user1);
+    authService.register(user2);
+
+    log.info("Users and Carts created successfully");
   }
 }

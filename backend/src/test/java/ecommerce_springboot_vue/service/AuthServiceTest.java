@@ -21,9 +21,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import ecommerce_springboot_vue.dto.request.user.ChangePasswordRequest;
 import ecommerce_springboot_vue.dto.request.user.LoginRequest;
 import ecommerce_springboot_vue.dto.response.AuthResponse;
+import ecommerce_springboot_vue.entity.Cart;
 import ecommerce_springboot_vue.entity.User;
 import ecommerce_springboot_vue.exception.BadRequestException;
 import ecommerce_springboot_vue.mapper.UserMapper;
+import ecommerce_springboot_vue.repository.ICartRepository;
 import ecommerce_springboot_vue.repository.IUserRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,6 +36,9 @@ class AuthServiceTest {
 
   @Mock
   private UserService userService;
+
+  @Mock
+  private ICartRepository cartRepository;
 
   @Mock
   private JwtService jwtService;
@@ -104,17 +109,24 @@ class AuthServiceTest {
     User userToRegister = User.builder()
       .email("new@test.com")
       .password("password123")
+      .role(User.Role.USER)
       .build();
+
+    Cart expectedCart = Cart.builder()
+        .user(userToRegister)
+        .build();
 
     when(userRepository.findByEmail(userToRegister.getEmail())).thenReturn(Optional.empty());
     when(passwordEncoder.encode(any())).thenReturn("encodedPassword");
     when(userRepository.save(any())).thenReturn(userToRegister);
+    when(cartRepository.save(any(Cart.class))).thenReturn(expectedCart);
 
     User registeredUser = authService.register(userToRegister);
 
     assertNotNull(registeredUser);
     verify(emailService).sendConfirmationCode(userToRegister);
     verify(userRepository).save(userToRegister);
+    verify(cartRepository).save(any(Cart.class));
   }
 
   @Test

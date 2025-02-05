@@ -2,12 +2,11 @@ import { defineStore } from "pinia";
 
 export const useCartStore = defineStore("cart", {
   state: () => ({
-    items: [],
+    items: JSON.parse(localStorage.getItem("cart")) || [],
   }),
 
   getters: {
-    totalItems: (state) =>
-      state.items.reduce((sum, item) => sum + item.quantity, 0),
+    totalItems: (state) => state.items.reduce((sum, item) => sum + item.quantity, 0),
     totalAmount: (state) =>
       state.items.reduce((sum, item) => sum + item.price * item.quantity, 0),
   },
@@ -23,28 +22,40 @@ export const useCartStore = defineStore("cart", {
           id: product.id,
           name: product.name,
           price: product.price,
-          image: product.image,
+          imageUrl: product.imageUrl,
           quantity,
         });
       }
+      this.saveCart();
     },
 
     removeFromCart(productId) {
       const index = this.items.findIndex((item) => item.id === productId);
       if (index > -1) {
         this.items.splice(index, 1);
+        this.saveCart();
       }
     },
 
-    updateQuantity(productId, quantity) {
+    incrementQuantity(productId) {
       const item = this.items.find((item) => item.id === productId);
       if (item) {
-        item.quantity = quantity;
+        item.quantity++;
+        this.saveCart();
       }
     },
 
-    clearCart() {
-      this.items = [];
+    decrementQuantity(productId) {
+      const item = this.items.find((item) => item.id === productId);
+      if (item && item.quantity > 1) {
+        item.quantity--;
+        this.saveCart();
+      }
     },
+
+    // Auxiliary method to save the cart in the local storage
+    saveCart() {
+      localStorage.setItem("cart", JSON.stringify(this.items));
+    }
   },
 });

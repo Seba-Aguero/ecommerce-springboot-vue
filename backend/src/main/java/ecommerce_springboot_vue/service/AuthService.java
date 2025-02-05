@@ -11,10 +11,13 @@ import org.springframework.stereotype.Service;
 import ecommerce_springboot_vue.dto.request.user.ChangePasswordRequest;
 import ecommerce_springboot_vue.dto.request.user.LoginRequest;
 import ecommerce_springboot_vue.dto.response.AuthResponse;
+import ecommerce_springboot_vue.entity.Cart;
 import ecommerce_springboot_vue.entity.User;
 import ecommerce_springboot_vue.exception.BadRequestException;
 import ecommerce_springboot_vue.mapper.UserMapper;
+import ecommerce_springboot_vue.repository.ICartRepository;
 import ecommerce_springboot_vue.repository.IUserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,6 +30,7 @@ public class AuthService {
   private final UserMapper userMapper;
   private final PasswordEncoder passwordEncoder;
   private final IUserRepository userRepository;
+  private final ICartRepository cartRepository;
 
   public AuthResponse login(LoginRequest request) {
     try {
@@ -50,16 +54,26 @@ public class AuthService {
     }
   }
 
+  @Transactional
   public User register(User user) {
     if(userRepository.findByEmail(user.getEmail()).isPresent()) {
       throw new IllegalStateException("Email already taken");
     }
     user.setPassword(passwordEncoder.encode(user.getPassword()));
-    user.setRole(User.Role.USER);
+    user.setRole(user.getRole() == null ? User.Role.USER : user.getRole());
     user.setConfirmationCode(generateConfirmationCode());
     user.setEmailConfirmation(false);
     emailService.sendConfirmationCode(user);
-    return userRepository.save(user);
+    User createdUser = userRepository.save(user);
+
+    if (createdUser.getRole() == User.Role.USER) {
+      Cart cart = Cart.builder()
+        .user(createdUser)
+        .build();
+      cartRepository.save(cart);
+    }
+
+    return createdUser;
   }
 
   private String generateConfirmationCode() {

@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import ecommerce_springboot_vue.dto.ProductDto;
 import ecommerce_springboot_vue.entity.Product;
@@ -111,10 +112,11 @@ class ProductServiceTest {
     assertEquals(testProductDto.getName(), result.getName());
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   void getAllProductsSuccess() {
     Page<Product> productPage = new PageImpl<>(List.of(testProduct));
-    when(productRepository.findAll(any(Pageable.class))).thenReturn(productPage);
+    when(productRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(productPage);
     when(productMapper.entityToDto(testProduct)).thenReturn(testProductDto);
 
     Page<ProductDto> result = productService.getAllProducts(null, null, null, null, PageRequest.of(0, 10));
