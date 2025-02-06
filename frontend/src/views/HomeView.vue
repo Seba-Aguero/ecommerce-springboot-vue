@@ -49,7 +49,7 @@
           </p>
         </div>
 
-        <div class="mt-10">
+        <div class="mt-12">
           <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
             <div class="flex flex-col items-center">
               <Truck class="h-12 w-12 text-primary-500 dark:text-primary-400" aria-hidden="true" />

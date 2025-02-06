@@ -7,7 +7,7 @@
         @input="handleMinChange"
         type="number"
         placeholder="Min"
-        class="number-input w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        class="custom-number-input w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
       />
     </div>
     <span class="text-gray-500">-</span>
@@ -18,7 +18,7 @@
         @input="handleMaxChange"
         type="number"
         placeholder="Max"
-        class="number-input w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        class="custom-number-input w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
       />
     </div>
   </div>
@@ -52,16 +52,3 @@ const handleMaxChange = (event) => {
   });
 };
 </script>
-
-<style scoped>
-/* Remove arrows/spinners from number inputs */
-.number-input::-webkit-outer-spin-button,
-.number-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.number-input {
-  -moz-appearance: textfield; /* Firefox */
-}
-</style>

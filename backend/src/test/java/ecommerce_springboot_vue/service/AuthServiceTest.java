@@ -163,7 +163,7 @@ class AuthServiceTest {
 
     when(userService.getUserByEmail(testUser.getEmail())).thenReturn(testUser);
 
-    assertThrows(BadCredentialsException.class, 
+    assertThrows(BadCredentialsException.class,
       () -> authService.confirmEmail(testUser.getEmail(), "invalid"));
   }
 

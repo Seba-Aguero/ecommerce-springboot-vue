@@ -21,16 +21,6 @@ export const cartService = {
     }
   },
 
-  async updateQuantity(productId, quantity) {
-    const cartStore = useCartStore();
-    try {
-      await cartStore.updateQuantity(productId, quantity);
-      return true;
-    } catch (error) {
-      throw new Error("Error updating quantity: " + error.message);
-    }
-  },
-
   async clearCart() {
     const cartStore = useCartStore();
     try {

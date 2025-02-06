@@ -16,7 +16,6 @@
 
         <!-- Desktop Menu -->
         <div class="hidden md:flex md:items-center gap-4">
-
           <!-- Theme Toggle Button -->
           <button
             @click="toggleTheme"
@@ -29,11 +28,10 @@
           </button>
 
           <!-- Cart -->
-          <router-link
+          <button
             v-if="authStore.isAuthenticated"
-            to="/cart"
+            @click="isCartOpen = true"
             class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium relative"
-            title="Cart"
             aria-label="Cart"
           >
             <ShoppingCart class="h-5 w-5 inline-block no-transition" />
@@ -43,7 +41,7 @@
             >
               {{ cartStore.totalItems }}
             </span>
-          </router-link>
+          </button>
 
           <!-- Desktop Auth Menu -->
           <div v-if="authStore.isAuthenticated" class="relative">
@@ -97,12 +95,12 @@
           </div>
         </div>
 
-        <!-- Mobile menu button -->
-        <div class="flex items-center md:hidden">
+        <!-- Mobile Navbar Items -->
+        <div class="flex items-center md:hidden gap-3">
           <!-- Theme Toggle Button for Mobile -->
           <button
             @click="toggleTheme"
-            class="p-2 text-gray-500 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 rounded-full mr-2"
+            class="p-2 text-gray-500 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 rounded-full"
             :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
             aria-label="Toggle Theme"
           >
@@ -110,26 +108,28 @@
             <Moon v-else class="h-5 w-5 no-transition" />
           </button>
 
-          <router-link
-            to="/cart"
-            class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md relative mr-2"
+          <!-- Cart for Mobile -->
+          <button
+            v-if="authStore.isAuthenticated"
+            @click="isCartOpen = true"
+            class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium relative"
             aria-label="Cart"
           >
-            <ShoppingCart class="h-5 w-5 no-transition" />
+            <ShoppingCart class="h-5 w-5 inline-block no-transition" />
             <span
               v-if="cartStore.totalItems"
               class="absolute -top-1 -right-1 bg-primary-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
             >
               {{ cartStore.totalItems }}
             </span>
-          </router-link>
+          </button>
 
+          <!-- Mobile Burger Menu -->
           <button
             @click="isMobileMenuOpen = !isMobileMenuOpen"
             class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
             aria-label="Open main menu"
           >
-            <span class="sr-only">Open main menu</span>
             <Menu v-if="!isMobileMenuOpen" class="block h-6 w-6" />
             <X v-else class="block h-6 w-6" />
           </button>
@@ -140,7 +140,6 @@
     <!-- Mobile menu -->
     <div v-show="isMobileMenuOpen" class="md:hidden">
       <div class="px-2 pt-2 pb-3 space-y-1">
-
         <!-- Mobile Auth Menu -->
         <template v-if="authStore.isAuthenticated">
           <router-link
@@ -181,6 +180,7 @@
         </template>
       </div>
     </div>
+    <CartModal :is-open="isCartOpen" @close="isCartOpen = false" />
   </nav>
 </template>
 
@@ -192,22 +192,16 @@ import { useCartStore } from "@/stores/cartStore";
 import { useThemeStore } from "@/stores/themeStore";
 import { authService } from "@/services/authService";
 import { themeService } from "@/services/themeService";
-import {
-  ShoppingBag,
-  ShoppingCart,
-  User,
-  Menu,
-  X,
-  Sun,
-  Moon,
-} from "lucide-vue-next";
+import CartModal from "@/components/cart/CartModal.vue";
+import { ShoppingBag, ShoppingCart, User, Menu, X, Sun, Moon } from "lucide-vue-next";
 
 const router = useRouter();
 const authStore = useAuthStore();
 const cartStore = useCartStore();
+const themeStore = useThemeStore();
 const isMenuOpen = ref(false);
 const isMobileMenuOpen = ref(false);
-const themeStore = useThemeStore();
+const isCartOpen = ref(false);
 
 const isDark = computed(() => themeService.getTheme());
 

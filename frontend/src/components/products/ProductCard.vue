@@ -33,7 +33,7 @@
           </p>
           <button
             @click="$emit('view-product', product.id)"
-            class="mt-3 w-full bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 text-white font-medium py-2 px-4 rounded-md transition duration-300"
+            class="mt-3 w-full bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 text-white font-medium py-2 px-4 rounded-md"
             aria-label="View Product"
           >
             View Product
