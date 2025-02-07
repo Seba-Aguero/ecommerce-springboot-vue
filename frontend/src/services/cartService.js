@@ -21,6 +21,26 @@ export const cartService = {
     }
   },
 
+  async incrementQuantity(productId) {
+    const cartStore = useCartStore();
+    try {
+      await cartStore.incrementQuantity(productId);
+      return true;
+    } catch (error) {
+      throw new Error("Error incrementing quantity: " + error.message);
+    }
+  },
+
+  async decrementQuantity(productId) {
+    const cartStore = useCartStore();
+    try {
+      await cartStore.decrementQuantity(productId);
+      return true;
+    } catch (error) {
+      throw new Error("Error decrementing quantity: " + error.message);
+    }
+  },
+
   async clearCart() {
     const cartStore = useCartStore();
     try {

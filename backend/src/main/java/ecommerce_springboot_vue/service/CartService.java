@@ -9,6 +9,7 @@ import ecommerce_springboot_vue.entity.Cart;
 import ecommerce_springboot_vue.entity.CartItem;
 import ecommerce_springboot_vue.entity.Product;
 import ecommerce_springboot_vue.entity.User;
+import ecommerce_springboot_vue.enums.CartOperation;
 import ecommerce_springboot_vue.exception.InsufficientStockException;
 import ecommerce_springboot_vue.exception.ResourceNotFoundException;
 import ecommerce_springboot_vue.mapper.CartMapper;
@@ -71,12 +72,28 @@ public class CartService {
     return cartMapper.entityToDto(savedCart);
   }
 
-  public void clearCart(Long userId){
+  public CartDto updateQuantity(Long userId, Long productId, CartOperation operation) {
     Cart cart = cartRepository.findByUserId(userId)
-      .orElseThrow(()->new RuntimeException("Cart not found"));
+      .orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
 
-    cart.getCartItems().clear();
-    cartRepository.save(cart);
+    CartItem cartItem = cart.getCartItems().stream()
+      .filter(item -> item.getProduct().getId().equals(productId))
+      .findFirst()
+      .orElseThrow(() -> new ResourceNotFoundException("Item not found in cart"));
+
+    switch (operation) {
+      case INCREMENT:
+        cartItem.setQuantity(cartItem.getQuantity() + 1);
+        break;
+      case DECREMENT:
+        if (cartItem.getQuantity() > 1) {
+            cartItem.setQuantity(cartItem.getQuantity() - 1);
+        }
+        break;
+    }
+
+    Cart savedCart = cartRepository.save(cart);
+    return cartMapper.entityToDto(savedCart);
   }
 
   public void removeCartItem(Long userId, Long productId) {
@@ -86,5 +103,13 @@ public class CartService {
     cart.getCartItems().removeIf(item -> item.getProduct().getId().equals(productId));
 
     cartRepository.save(cart);
-    }
+  }
+
+  public void clearCart(Long userId){
+    Cart cart = cartRepository.findByUserId(userId)
+      .orElseThrow(()->new RuntimeException("Cart not found"));
+
+    cart.getCartItems().clear();
+    cartRepository.save(cart);
+  }
 }

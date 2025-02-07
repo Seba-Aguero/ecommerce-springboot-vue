@@ -51,7 +51,7 @@ export const useProductStore = defineStore("products", {
                 .includes(state.filters.search.toLowerCase()));
         }
 
-        // If the product matches all the filters, return true
+        // If the product matches all the filters, this returns true
         return matches;
       });
     },
