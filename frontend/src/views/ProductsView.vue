@@ -5,16 +5,25 @@
     <div class="flex flex-col lg:flex-row gap-8">
       <!-- Filters Sidebar -->
       <div class="w-full lg:w-1/4">
-        <FilterSection
-          :filters="productStore.filters"
-          :categories="categories"
-          :filteredProductsCount="productStore.totalElements"
-        />
+        <LoadingWrapper
+          :loading="loadingFilters"
+          :skeleton-count="6"
+          :skeleton-height="[15, 20, 40, 15, 15, 40]"
+          :skeleton-width="['50%', '100%', '100%', '100%', '50%', '100%']"
+        >
+          <FilterSection
+            :filters="productStore.filters"
+            :categories="categories"
+            :filteredProductsCount="productStore.totalElements"
+          />
+        </LoadingWrapper>
       </div>
 
       <!-- Products Grid -->
       <div class="w-full lg:w-3/4">
-        <LoadingSpinner v-if="productStore.loading" />
+        <div v-if="productStore.loading">
+          <LoadingSpinner />
+        </div>
 
         <div
           v-else-if="productStore.error"
@@ -38,7 +47,9 @@
                 v-for="product in productStore.filteredProducts"
                 :key="product.id"
                 :product="product"
-                @view-product="viewProduct"
+                @view-product="
+                  router.push({ name: 'ProductDetail', params: { id: product.id } })
+                "
               />
             </div>
 
@@ -56,38 +67,38 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, defineAsyncComponent } from "vue";
 import { useRouter } from "vue-router";
 import { useProductStore } from "@/stores/productStore";
 import { useCategoryStore } from "@/stores/categoryStore";
 import ProductCard from "@/components/products/ProductCard.vue";
 import LoadingSpinner from "@/components/common/LoadingSpinner.vue";
-import FilterSection from "@/components/products/filters/FilterSection.vue";
 import PaginationControls from "@/components/common/pagination/PaginationControls.vue";
 import EmptyState from "@/components/common/EmptyState.vue";
+import LoadingWrapper from "@/components/common/LoadingWrapper.vue";
+const FilterSection = defineAsyncComponent(() =>
+  import("@/components/products/filters/FilterSection.vue")
+);
 
 const productStore = useProductStore();
 const categoryStore = useCategoryStore();
 const categories = ref([]);
 const router = useRouter();
+const loadingFilters = ref(true);
 
 const changePage = async (page) => {
   await productStore.fetchProducts({ page });
 };
 
-const viewProduct = (productId) => {
-  router.push({ name: "ProductDetail", params: { id: productId } });
-};
-
 onMounted(async () => {
   try {
-    await Promise.all([
-      categoryStore.fetchCategories(),
-      productStore.fetchProducts({ page: 0 }),
-    ]);
+    await categoryStore.fetchCategories();
     categories.value = categoryStore.categories;
+    await productStore.fetchProducts({ page: 0 });
   } catch (error) {
     console.error("Error loading initial data:", error);
+  } finally {
+    loadingFilters.value = false;
   }
 });
 </script>
