@@ -1,53 +1,28 @@
-import { useAuthStore } from "@/stores/authStore";
 import api from "@/services/api";
 
 export const authService = {
   async login(credentials) {
-    const authStore = useAuthStore();
-    try {
-      await authStore.login(credentials);
-      return true;
-    } catch (error) {
-      throw new Error("Invalid credentials");
-    }
+    const response = await api.post("/api/v1/auth/login", credentials);
+    return response.data;
   },
 
   async register(userData) {
-    const authStore = useAuthStore();
-    try {
-      await authStore.register(userData);
-      return true;
-    } catch (error) {
-      throw error;
-    }
-  },
-
-  async logout() {
-    const authStore = useAuthStore();
-    try {
-      await authStore.logout();
-    } catch (error) {
-      throw new Error("Error during logout: " + error.message);
-    }
+    const response = await api.post("/api/v1/auth/register", userData);
+    return response.data;
   },
 
   async confirmEmail(data) {
-    try {
-      await api.post("/api/v1/auth/confirm-email", data);
-      return true;
-    } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Error confirming email"
-      );
-    }
+    await api.post("/api/v1/auth/confirm-email", data);
+    return true;
   },
 
   async resendConfirmationCode(email) {
-    try {
-      await api.post("/api/v1/auth/resend-confirmation", { email });
-      return true;
-    } catch (error) {
-      throw new Error(error.response?.data?.message || "Error resending code");
-    }
+    await api.post("/api/v1/auth/resend-confirmation", { email });
+    return true;
+  },
+
+  async fetchUserProfile() {
+    const response = await api.get("/api/v1/users/profile");
+    return response.data;
   },
 };

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import api from "@/services/api";
+import { orderService } from "@/services/orderService";
 
 export const useOrderStore = defineStore("orders", {
   state: () => ({
@@ -13,7 +13,7 @@ export const useOrderStore = defineStore("orders", {
     async createOrder(orderData) {
       this.loading = true;
       try {
-        const response = await api.post("/orders/create", orderData);
+        const response = await orderService.createOrder(orderData);
         this.currentOrder = response.data;
         return response.data;
       } catch (error) {
@@ -27,10 +27,11 @@ export const useOrderStore = defineStore("orders", {
     async fetchUserOrders(userId) {
       this.loading = true;
       try {
-        const response = await api.get(`/orders/user/${userId}`);
+        const response = await orderService.fetchUserOrders(userId);
         this.orders = response.data;
       } catch (error) {
         this.error = error.message;
+        throw error;
       } finally {
         this.loading = false;
       }
@@ -39,10 +40,11 @@ export const useOrderStore = defineStore("orders", {
     async getOrderById(orderId) {
       this.loading = true;
       try {
-        const response = await api.get(`/orders/${orderId}`);
+        const response = await orderService.getOrderById(orderId);
         this.currentOrder = response.data;
       } catch (error) {
         this.error = error.message;
+        throw error;
       } finally {
         this.loading = false;
       }

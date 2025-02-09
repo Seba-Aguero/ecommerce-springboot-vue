@@ -17,16 +17,22 @@
 <script setup>
 import { onMounted } from "vue";
 import { useAuthStore } from "@/stores/authStore";
+import { useThemeStore } from "@/stores/themeStore";
+import { useCartStore } from "@/stores/cartStore";
 import Navbar from "@/components/common/Navbar.vue";
 import Footer from "@/components/common/Footer.vue";
 
 const authStore = useAuthStore();
+const cartStore = useCartStore();
+const themeStore = useThemeStore();
 
 onMounted(async () => {
+  themeStore.initTheme();
   // If there is a token, try to load the user profile
   if (localStorage.getItem("token")) {
     try {
       await authStore.fetchUserProfile();
+      cartStore.setUserId();
     } catch (error) {
       console.error("Error fetching user profile:", error);
     }

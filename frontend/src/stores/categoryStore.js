@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import api from "@/services/api";
+import { categoryService } from "@/services/categoryService";
 
 export const useCategoryStore = defineStore("categories", {
   state: () => ({
@@ -12,7 +12,7 @@ export const useCategoryStore = defineStore("categories", {
     async fetchCategories() {
       this.loading = true;
       try {
-        const response = await api.get("/api/v1/categories");
+        const response = await categoryService.fetchCategories();
         this.categories = response.data;
       } catch (error) {
         this.error = error.message;

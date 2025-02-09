@@ -1,38 +1,23 @@
-import { useProductStore } from "@/stores/productStore";
-import { useCartStore } from "@/stores/cartStore";
+import api from "@/services/api";
 
 export const productService = {
-  async fetchProducts(filters = {}) {
-    const productStore = useProductStore();
-    try {
-      const response = await productStore.fetchProducts();
-      // Extract the products from the response
-      return response.content;
-    } catch (error) {
-      throw new Error("Error fetching products: " + error.message);
-    }
+  async fetchProducts(params = {}) {
+    return await api.get("/api/v1/products", { params });
   },
 
-  async getProductById(id) {
-    try {
-      const productStore = useProductStore();
-      const product = await productStore.getProductById(id);
-      return product;
-    } catch (error) {
-      throw new Error("Error fetching product: " + error.message);
-    }
+  async fetchProductById(productId) {
+    return await api.get(`/api/v1/products/${productId}`);
   },
 
-  async addToCart(product, quantity = 1) {
-    const cartStore = useCartStore();
-    try {
-      if (!product.quantity || product.quantity <= quantity) {
-        throw new Error("Insufficient stock");
-      }
-      await cartStore.addToCart(product, quantity);
-    } catch (error) {
-      throw new Error("Error adding to cart: " + error.message);
-    }
-  }
+  async createProduct(productData) {
+    return await api.post("/api/v1/products", productData);
+  },
 
+  async updateProduct(productId, productData) {
+    return await api.put(`/api/v1/products/${productId}`, productData);
+  },
+
+  async deleteProduct(productId) {
+    return await api.delete(`/api/v1/products/${productId}`);
+  },
 };

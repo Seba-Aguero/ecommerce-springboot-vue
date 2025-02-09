@@ -1,53 +1,30 @@
-import { useCartStore } from "@/stores/cartStore";
+import api from "@/services/api";
 
 export const cartService = {
-  async addToCart(product, quantity = 1) {
-    const cartStore = useCartStore();
-    try {
-      await cartStore.addToCart(product, quantity);
-      return true;
-    } catch (error) {
-      throw new Error("Error adding to cart: " + error.message);
-    }
+  async addToCart(userId, product, quantity = 1) {
+    return await api.post(`/api/v1/cart/${userId}/items`, {
+      productId: product.id,
+      quantity,
+    });
   },
 
-  async removeFromCart(productId) {
-    const cartStore = useCartStore();
-    try {
-      await cartStore.removeFromCart(productId);
-      return true;
-    } catch (error) {
-      throw new Error("Error removing from cart: " + error.message);
-    }
+  async removeFromCart(userId, productId) {
+    return await api.delete(`/api/v1/cart/${userId}/items/${productId}`);
   },
 
-  async incrementQuantity(productId) {
-    const cartStore = useCartStore();
-    try {
-      await cartStore.incrementQuantity(productId);
-      return true;
-    } catch (error) {
-      throw new Error("Error incrementing quantity: " + error.message);
-    }
+  async incrementQuantity(userId, productId) {
+    return await api.patch(
+      `/api/v1/cart/${userId}/items/${productId}?operation=INCREMENT`
+    );
   },
 
-  async decrementQuantity(productId) {
-    const cartStore = useCartStore();
-    try {
-      await cartStore.decrementQuantity(productId);
-      return true;
-    } catch (error) {
-      throw new Error("Error decrementing quantity: " + error.message);
-    }
+  async decrementQuantity(userId, productId) {
+    return await api.patch(
+      `/api/v1/cart/${userId}/items/${productId}?operation=DECREMENT`
+    );
   },
 
-  async clearCart() {
-    const cartStore = useCartStore();
-    try {
-      await cartStore.clearCart();
-      return true;
-    } catch (error) {
-      throw new Error("Error clearing cart: " + error.message);
-    }
+  async clearCart(userId) {
+    return await api.delete(`/api/v1/cart/${userId}`);
   },
 };

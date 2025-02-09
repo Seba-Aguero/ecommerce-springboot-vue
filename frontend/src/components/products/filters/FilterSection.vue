@@ -107,7 +107,7 @@ const localSearch = ref("");
 const localMinPrice = ref(null);
 const localMaxPrice = ref(null);
 const timeout = ref(null);
-const TIMEOUT_DURATION = 500;
+const TIMEOUT_DURATION = 400;
 
 const toggleCategories = () => {
   showCategories.value = !showCategories.value;

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import api from "@/services/api";
+import { productService } from "@/services/productService";
 
 export const useProductStore = defineStore("products", {
   state: () => ({
@@ -24,7 +24,7 @@ export const useProductStore = defineStore("products", {
         let matches = true;
 
         if (state.filters.categories.length > 0) {
-          // It has to have at least one category
+          // Must have at least one category
           matches =
             matches &&
             product.categories.some((category) =>
@@ -43,9 +43,7 @@ export const useProductStore = defineStore("products", {
         if (state.filters.search) {
           matches =
             matches &&
-            (product.name
-              .toLowerCase()
-              .includes(state.filters.search.toLowerCase()) ||
+            (product.name.toLowerCase().includes(state.filters.search.toLowerCase()) ||
               product.description
                 .toLowerCase()
                 .includes(state.filters.search.toLowerCase()));
@@ -68,7 +66,7 @@ export const useProductStore = defineStore("products", {
   },
 
   actions: {
-    async fetchProducts( params = {} ) {
+    async fetchProducts(params = {}) {
       this.loading = true;
       try {
         const queryParams = new URLSearchParams();
@@ -91,7 +89,7 @@ export const useProductStore = defineStore("products", {
           queryParams.append("search", this.filters.search);
         }
 
-        const response = await api.get(`/api/v1/products?${queryParams}`);
+        const response = await productService.fetchProducts(queryParams);
 
         // Update the state with the fetched data
         this.products = response.data.content;
@@ -111,7 +109,7 @@ export const useProductStore = defineStore("products", {
     async fetchProductById(id) {
       this.loading = true;
       try {
-        const response = await api.get(`/api/v1/products/${id}`);
+        const response = await productService.fetchProductById(id);
         this.currentProduct = response.data;
       } catch (error) {
         this.error = error.response?.data?.message || error.message;

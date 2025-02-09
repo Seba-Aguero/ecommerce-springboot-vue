@@ -166,20 +166,21 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
-import { productService } from "@/services/productService";
+import { useProductStore } from "@/stores/productStore";
 import { Truck, ShieldCheck, Headphones, Mail, Phone } from "lucide-vue-next";
 import ProductCard from "@/components/products/ProductCard.vue";
 import LoadingSpinner from "@/components/common/LoadingSpinner.vue";
 
 const router = useRouter();
+const productStore = useProductStore();
 const featuredProducts = ref([]);
 const loading = ref(false);
 
 onMounted(async () => {
   loading.value = true;
   try {
-    const products = await productService.fetchProducts();
-    featuredProducts.value = products.slice(0, 4);
+    const products = await productStore.fetchProducts();
+    featuredProducts.value = products.content.slice(0, 4);
   } catch (error) {
     console.error(error.message);
   } finally {

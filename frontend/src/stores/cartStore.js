@@ -1,8 +1,10 @@
 import { defineStore } from "pinia";
-import api from "@/services/api";
+import { cartService } from "@/services/cartService";
+import { useAuthStore } from "@/stores/authStore";
 
 export const useCartStore = defineStore("cart", {
   state: () => ({
+    userId: null,
     items: JSON.parse(localStorage.getItem("cart")) || [],
   }),
 
@@ -13,14 +15,14 @@ export const useCartStore = defineStore("cart", {
   },
 
   actions: {
+    setUserId() {
+      const authStore = useAuthStore();
+      this.userId = authStore.user?.id || null;
+    },
+
     async addToCart(product, quantity = 1) {
       try {
-        // First update backend
-        await api.post(`/api/v1/cart/${this.userId}/items`, {
-          productId: product.id,
-          quantity,
-        });
-        // Then update local state
+        await cartService.addToCart(this.userId, product, quantity);
         const existingItem = this.items.find((item) => item.id === product.id);
         if (existingItem) {
           existingItem.quantity += quantity;
@@ -35,7 +37,7 @@ export const useCartStore = defineStore("cart", {
 
     async removeFromCart(productId) {
       try {
-        await api.delete(`/api/v1/cart/${this.userId}/items/${productId}`);
+        await cartService.removeFromCart(this.userId, productId);
         const index = this.items.findIndex((item) => item.id === productId);
         if (index > -1) {
           this.items.splice(index, 1);
@@ -48,9 +50,7 @@ export const useCartStore = defineStore("cart", {
 
     async incrementQuantity(productId) {
       try {
-        await api.patch(
-          `/api/v1/cart/${this.userId}/items/${productId}?operation=INCREMENT`
-        );
+        await cartService.incrementQuantity(this.userId, productId);
         const item = this.items.find((item) => item.id === productId);
         if (item) {
           item.quantity++;
@@ -63,8 +63,8 @@ export const useCartStore = defineStore("cart", {
 
     async decrementQuantity(productId) {
       try {
-        await api.patch(`/api/v1/cart/${this.userId}/items/${productId}?operation=DECREMENT`);
-        const item = this.items.find(item => item.id === productId);
+        await cartService.decrementQuantity(this.userId, productId);
+        const item = this.items.find((item) => item.id === productId);
         if (item && item.quantity > 1) {
           item.quantity--;
           this.saveCart();
@@ -76,7 +76,7 @@ export const useCartStore = defineStore("cart", {
 
     async clearCart() {
       try {
-        await api.delete(`/api/v1/cart/${this.userId}`);
+        await cartService.clearCart(this.userId);
         this.items = [];
         this.saveCart();
       } catch (error) {
@@ -84,7 +84,6 @@ export const useCartStore = defineStore("cart", {
       }
     },
 
-    // Auxiliary method to save the cart in the local storage
     saveCart() {
       localStorage.setItem("cart", JSON.stringify(this.items));
     },

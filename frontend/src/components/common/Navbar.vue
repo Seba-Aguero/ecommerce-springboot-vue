@@ -51,7 +51,6 @@
               aria-label="User Menu"
             >
               <User class="h-5 w-5 mr-1 no-transition" />
-              {{ authStore.userFullName }}
             </button>
 
             <div
@@ -151,7 +150,7 @@
             My Profile
           </router-link>
           <button
-            @click="handleMobileLogout"
+            @click="handleLogout"
             class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
             aria-label="Log Out"
           >
@@ -185,13 +184,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 import { useCartStore } from "@/stores/cartStore";
 import { useThemeStore } from "@/stores/themeStore";
-import { authService } from "@/services/authService";
-import { themeService } from "@/services/themeService";
 import CartModal from "@/components/cart/CartModal.vue";
 import { ShoppingBag, ShoppingCart, User, Menu, X, Sun, Moon } from "lucide-vue-next";
 
@@ -203,29 +200,20 @@ const isMenuOpen = ref(false);
 const isMobileMenuOpen = ref(false);
 const isCartOpen = ref(false);
 
-const isDark = computed(() => themeService.getTheme());
+const isDark = computed(() => themeStore.isDark);
 
 const toggleTheme = () => {
-  themeService.toggleTheme();
+  themeStore.toggleTheme();
 };
-
-onMounted(() => {
-  themeStore.initTheme();
-});
 
 const handleLogout = async () => {
   try {
-    await authService.logout();
+    await authStore.logout();
     isMenuOpen.value = false;
+    isMobileMenuOpen.value = false;
     router.push("/login");
   } catch (error) {
     console.error(error.message);
   }
-};
-
-const handleMobileLogout = async () => {
-  await authStore.logout();
-  isMobileMenuOpen.value = false;
-  router.push("/login");
 };
 </script>

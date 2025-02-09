@@ -195,7 +195,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { authService } from "@/services/authService";
+import { useAuthStore } from "@/stores/authStore";
 import {
   ShoppingBag,
   Mail,
@@ -210,6 +210,7 @@ import { useToast } from "vue-toastification";
 import ButtonSpinner from "@/components/common/ButtonSpinner.vue";
 
 const router = useRouter();
+const authStore = useAuthStore();
 const toast = useToast();
 const firstName = ref("");
 const lastName = ref("");
@@ -225,7 +226,7 @@ const handleRegister = async () => {
   loading.value = true;
   error.value = ""; // Reset error message
   try {
-    await authService.register({
+    await authStore.register({
       email: email.value,
       password: password.value,
       confirmPassword: confirmPassword.value,

@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const useThemeStore = defineStore("theme", () => {
-  const isDark = ref(false);
+  const isDark = ref(true);
 
   function toggleTheme() {
     isDark.value = !isDark.value;
@@ -17,15 +17,15 @@ export const useThemeStore = defineStore("theme", () => {
 
   function initTheme() {
     if (
-      localStorage.theme === "dark" ||
+      localStorage.theme === "light" ||
       (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
+        window.matchMedia("(prefers-color-scheme: light)").matches)
     ) {
-      isDark.value = true;
-      document.documentElement.classList.add("dark");
-    } else {
       isDark.value = false;
       document.documentElement.classList.remove("dark");
+    } else {
+      isDark.value = true;
+      document.documentElement.classList.add("dark");
     }
   }
 

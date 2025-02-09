@@ -83,17 +83,18 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
+import { useCartStore } from "@/stores/cartStore";
 import { Mail, KeyRound } from "lucide-vue-next";
 import AuthCard from "@/components/auth/AuthCard.vue";
-import { authService } from "@/services/authService";
 import { useToast } from "vue-toastification";
 import ButtonSpinner from "@/components/common/ButtonSpinner.vue";
 
 const router = useRouter();
 const toast = useToast();
 const authStore = useAuthStore();
+const cartStore = useCartStore();
 const email = ref(authStore.userEmail);
-const password = ref(sessionStorage.getItem("temp_password"));
+const password = ref(authStore.tempUserData?.password);
 const confirmationCode = ref("");
 const loading = ref(false);
 const error = ref("");
@@ -103,17 +104,19 @@ const handleConfirmation = async () => {
   error.value = "";
 
   try {
-    await authService.confirmEmail({
+    await authStore.confirmEmail({
       email: email.value,
       confirmationCode: confirmationCode.value,
       password: password.value,
     });
 
-    // If the confirmation was successful, then log in
-    await authService.login({
+    // If the confirmation was successful, then log in using temporary password
+    await authStore.login({
       email: email.value,
       password: password.value,
     });
+
+    cartStore.setUserId();
 
     toast.success("Email confirmed successfully! Redirecting...", {
       timeout: 2000,
@@ -126,8 +129,8 @@ const handleConfirmation = async () => {
     toast.error(error.value);
   } finally {
     loading.value = false;
-    // Clear the temporary password after using it
-    sessionStorage.removeItem("temp_password");
+    // Clear the temporary password from the authStore after using it
+    authStore.tempUserData = null;
   }
 };
 
@@ -136,7 +139,7 @@ const handleResendCode = async () => {
   error.value = "";
 
   try {
-    await authService.resendConfirmationCode(email.value);
+    await authStore.resendConfirmationCode(email.value);
     toast.info("New code sent to your email");
   } catch (err) {
     error.value = err.message || "Error sending confirmation code";
@@ -147,6 +150,7 @@ const handleResendCode = async () => {
 };
 
 onMounted(() => {
+  // Redirect if email or temporary password is missing from the authStore
   if (!email.value || !password.value) {
     router.push("/register");
   }

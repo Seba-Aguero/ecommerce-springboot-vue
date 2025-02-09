@@ -110,12 +110,15 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-import { authService } from "@/services/authService";
+import { useAuthStore } from "@/stores/authStore";
+import { useCartStore } from "@/stores/cartStore";
 import { ShoppingBag, Mail, Lock, ArrowRight } from "lucide-vue-next";
 import AuthCard from "@/components/auth/AuthCard.vue";
 import ButtonSpinner from "@/components/common/ButtonSpinner.vue";
 
 const router = useRouter();
+const authStore = useAuthStore();
+const cartStore = useCartStore();
 const email = ref("");
 const password = ref("");
 const loading = ref(false);
@@ -124,10 +127,13 @@ const toast = useToast();
 const handleLogin = async () => {
   loading.value = true;
   try {
-    await authService.login({
+    await authStore.login({
       email: email.value,
       password: password.value,
     });
+
+    cartStore.setUserId();
+
     toast.success("Login successful! Redirecting...", {
       timeout: 2000,
       onClose: () => {
