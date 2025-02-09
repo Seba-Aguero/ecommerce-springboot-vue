@@ -2,11 +2,8 @@ package ecommerce_springboot_vue.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +18,6 @@ import ecommerce_springboot_vue.dto.response.AuthResponse;
 import ecommerce_springboot_vue.entity.User;
 import ecommerce_springboot_vue.mapper.UserMapper;
 import ecommerce_springboot_vue.service.AuthService;
-import ecommerce_springboot_vue.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +31,6 @@ import org.slf4j.LoggerFactory;
 @Tag(name = "Auth", description = "Auth related endpoints")
 public class AuthController {
 
-  private final UserService userService;
   private final AuthService authService;
   private final UserMapper userMapper;
   private static final Logger log = LoggerFactory.getLogger(AuthController.class);

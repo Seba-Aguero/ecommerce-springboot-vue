@@ -19,9 +19,11 @@ import ecommerce_springboot_vue.repository.ICartRepository;
 import ecommerce_springboot_vue.repository.IUserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
   private final UserService userService;
   private final JwtService jwtService;
@@ -62,8 +64,10 @@ public class AuthService {
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     user.setRole(user.getRole() == null ? User.Role.USER : user.getRole());
     user.setConfirmationCode(generateConfirmationCode());
-    user.setEmailConfirmation(false);
-    emailService.sendConfirmationCode(user);
+    if (!Boolean.TRUE.equals(user.isEmailConfirmation())) {
+      user.setEmailConfirmation(false);
+      emailService.sendConfirmationCode(user);
+    }
     User createdUser = userRepository.save(user);
 
     if (createdUser.getRole() == User.Role.USER) {

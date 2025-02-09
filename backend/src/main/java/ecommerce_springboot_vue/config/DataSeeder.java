@@ -3,7 +3,6 @@ package ecommerce_springboot_vue.config;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import ecommerce_springboot_vue.entity.Category;
@@ -32,7 +31,6 @@ public class DataSeeder {
   private final IProductRepository productRepository;
   private final IUserRepository userRepository;
   private final AuthService authService;
-  private final PasswordEncoder passwordEncoder;
 
   @Bean
   CommandLineRunner initDatabase() {
@@ -358,7 +356,7 @@ public class DataSeeder {
     // Create admin user
     User admin = User.builder()
       .email("admin@example.com")
-      .password(passwordEncoder.encode("admin123"))
+      .password("admin123")
       .role(User.Role.ADMIN)
       .emailConfirmation(true)
       .build();
@@ -366,14 +364,14 @@ public class DataSeeder {
     // Create normal users
     User user1 = User.builder()
       .email("user1@example.com")
-      .password(passwordEncoder.encode("user123"))
+      .password("user123")
       .role(User.Role.USER)
       .emailConfirmation(true)
       .build();
 
     User user2 = User.builder()
       .email("user2@example.com")
-      .password(passwordEncoder.encode("user123"))
+      .password("user123")
       .role(User.Role.USER)
       .emailConfirmation(true)
       .build();
