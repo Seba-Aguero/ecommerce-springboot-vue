@@ -11,7 +11,7 @@
             :src="product.imageUrl"
             :alt="product.name"
             class="h-48 w-full object-cover object-center"
-            @error="handleImageError"
+            v-image-fallback
             aria-hidden="true"
           />
         </div>
@@ -51,10 +51,6 @@ defineProps({
     required: true,
   },
 });
-
-const handleImageError = (event) => {
-  event.target.src = "/images/image-placeholder.jpg";
-};
 
 const formatPrice = (price) => {
   return price.toFixed(2);

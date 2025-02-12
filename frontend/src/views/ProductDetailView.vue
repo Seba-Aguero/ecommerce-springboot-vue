@@ -13,7 +13,7 @@
           :src="productStore.currentProduct?.imageUrl"
           :alt="productStore.currentProduct?.name"
           class="w-full h-full max-h-[500px] max-w-[500px] rounded-lg shadow-lg object-contain bg-white dark:bg-gray-800"
-          @error="handleImageError"
+          v-image-fallback
         />
       </div>
 
@@ -29,7 +29,7 @@
           </p>
 
           <p class="mt-2 text-sm text-gray-700 dark:text-gray-400">
-            Stock: {{ productStore.currentProduct?.quantity }}
+            Stock: {{ productStore.currentProduct?.totalStock }}
           </p>
         </div>
 
@@ -59,16 +59,17 @@
                 id="quantity"
                 v-model.number="quantity"
                 min="1"
-                :max="productStore.currentProduct?.quantity"
+                :max="computeMaxQuantity"
+                @input="validateQuantity"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               />
             </div>
             <button
               @click="addToCart"
               class="flex-1 bg-primary-600 text-white px-6 py-2 rounded-md hover:bg-primary-700 transition-colors"
-              :disabled="!productStore.currentProduct?.quantity"
+              :disabled="!isProductAvailable || quantity <= 0"
             >
-              Add to Cart
+              {{ isProductAvailable ? "Add to Cart" : "Out of Stock" }}
             </button>
           </div>
         </div>
@@ -88,8 +89,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { ref, onMounted, computed } from "vue";
+import { useRoute } from "vue-router";
 import { useProductStore } from "@/stores/productStore";
 import { useCartStore } from "@/stores/cartStore";
 import LoadingSpinner from "@/components/common/LoadingSpinner.vue";
@@ -101,22 +102,61 @@ const productStore = useProductStore();
 const cartStore = useCartStore();
 const quantity = ref(1);
 
-const handleImageError = (event) => {
-  event.target.src = "/images/image-placeholder.jpg";
-};
+// const handleImageError = (event) => {
+//   event.target.src = "/images/image-placeholder.jpg";
+// };
 
 const formatPrice = (price) => {
   return price?.toFixed(2) ?? "0.00";
 };
 
+const isProductAvailable = computed(
+  () => productStore.currentProduct && productStore.currentProduct.totalStock > 0
+);
+
+// Compute current quantity already in cart for the product
+const currentCartItemQuantity = computed(() => {
+  if (!productStore.currentProduct) return 0;
+
+  return cartStore.items
+    .filter((item) => item.id === productStore.currentProduct.id)
+    .reduce((sum, item) => sum + item.quantity, 0);
+});
+
+// Compute maximum possible quantity based on stock and cart items
+const computeMaxQuantity = computed(() => {
+  if (!productStore.currentProduct) return 1;
+
+  return productStore.currentProduct.totalStock - currentCartItemQuantity.value;
+});
+
+// Quantity input validation
+const validateQuantity = () => {
+  if (quantity.value < 1) {
+    quantity.value = 1;
+  }
+  if (quantity.value > computeMaxQuantity.value) {
+    quantity.value = computeMaxQuantity.value;
+  }
+};
+
 const addToCart = async () => {
-  //UI validations
   if (!productStore.currentProduct) {
     toast.error("Product not available");
     return;
   }
-  if (quantity.value < 1 || quantity.value > productStore.currentProduct.quantity) {
-    toast.error("Quantity must be at least 1 and at most the available stock");
+
+  // Quantity validation
+  if (
+    quantity.value < 1 ||
+    currentCartItemQuantity.value + quantity.value >
+      productStore.currentProduct.totalStock
+  ) {
+    toast.error(
+      `Cannot add more than ${
+        productStore.currentProduct.totalStock - currentCartItemQuantity.value
+      } items to cart`
+    );
     return;
   }
 

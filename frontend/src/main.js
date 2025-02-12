@@ -3,6 +3,7 @@ import { createPinia } from "pinia";
 import App from "@/App.vue";
 import router from "@/router";
 import Toast from "vue-toastification";
+import { imageFallback } from "@/directives/image-fallback";
 import "@/assets/main.css";
 import "vue-toastification/dist/index.css";
 import "@brayamvalero/vue3-skeleton/dist/style.css";
@@ -25,5 +26,8 @@ app.use(Toast, {
   icon: true,
   rtl: false,
 });
+
+// Register the directive globally
+app.directive("image-fallback", imageFallback);
 
 app.mount("#app");
