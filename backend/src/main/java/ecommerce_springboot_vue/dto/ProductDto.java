@@ -27,9 +27,9 @@ public class ProductDto {
 
   private String description;
 
-  @NotNull(message = "Quantity can not be null")
-  @PositiveOrZero(message = "Quantity can not be negative")
-  private Integer quantity;
+  @NotNull(message = "Total stock can not be null")
+  @PositiveOrZero(message = "Total stock can not be negative")
+  private Integer totalStock;
 
   @NotNull(message = "Price can not be null")
   @PositiveOrZero(message = "Price can not be negative")

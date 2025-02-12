@@ -55,8 +55,8 @@ public class Product {
     private String description;
 
     @Column(nullable = false)
-    @PositiveOrZero(message = "Quantity can not be negative")
-    private Integer quantity;
+    @PositiveOrZero(message = "Total stock can not be negative")
+    private Integer totalStock;
 
     @Column(nullable = false)
     @PositiveOrZero(message = "Price can not be negative")

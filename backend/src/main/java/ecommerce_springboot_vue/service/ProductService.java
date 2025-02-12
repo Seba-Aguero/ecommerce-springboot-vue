@@ -55,14 +55,14 @@ public class ProductService {
     if (productDto.getPrice() != null && productDto.getPrice().compareTo(BigDecimal.ZERO) < 0) {
       throw new IllegalArgumentException("Price can not be negative");
     }
-    if (productDto.getQuantity() != null && productDto.getQuantity() < 0) {
-      throw new IllegalArgumentException("Quantity can not be negative");
+    if (productDto.getTotalStock() != null && productDto.getTotalStock() < 0) {
+      throw new IllegalArgumentException("Total stock can not be negative");
     }
 
     existingProduct.setName(productDto.getName());
     existingProduct.setDescription(productDto.getDescription());
     existingProduct.setPrice(productDto.getPrice());
-    existingProduct.setQuantity(productDto.getQuantity());
+    existingProduct.setTotalStock(productDto.getTotalStock());
 
     if (productDto.getCategories() != null && !productDto.getCategories().isEmpty()) {
       Set<Long> categoryIds = productDto.getCategories().stream()

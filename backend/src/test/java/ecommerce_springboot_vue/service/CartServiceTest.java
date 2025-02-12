@@ -61,7 +61,7 @@ class CartServiceTest {
     testProduct = Product.builder()
       .id(1L)
       .name("Test Product")
-      .quantity(10)
+      .totalStock(10)
       .build();
 
     testCart = Cart.builder()

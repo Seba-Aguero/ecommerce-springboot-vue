@@ -15,7 +15,7 @@
       <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Shopping Cart</h2>
       <button
         @click="$emit('close')"
-        class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+        class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition duration-0"
       >
         <X class="h-6 w-6" />
       </button>
@@ -25,9 +25,9 @@
     <div class="px-4 overflow-y-auto h-[calc(100vh-180px)] custom-scrollbar">
       <div
         v-if="!cartStore.items.length"
-        class="text-center text-gray-500 dark:text-gray-400"
+        class="text-center text-gray-500 dark:text-gray-400 mt-4"
       >
-        Your cart is empty
+        Your cart is empty!
       </div>
 
       <div v-else>
@@ -61,7 +61,7 @@
                 }}</span>
                 <button
                   @click="handleIncrementQuantity(item.id)"
-                  :disabled="item.quantity >= item.stock"
+                  :disabled="item.quantity >= item.totalStock"
                   class="text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-50 duration-0 disabled:opacity-40"
                 >
                   <Plus class="h-4 w-4" />

@@ -54,7 +54,7 @@ class ProductServiceTest {
       .name("Test Product")
       .description("Test Description")
       .price(BigDecimal.TEN)
-      .quantity(10)
+      .totalStock(10)
       .build();
 
     testProductDto = ProductDto.builder()
@@ -62,7 +62,7 @@ class ProductServiceTest {
       .name("Test Product")
       .description("Test Description")
       .price(BigDecimal.TEN)
-      .quantity(10)
+      .totalStock(10)
       .build();
   }
 

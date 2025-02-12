@@ -107,7 +107,7 @@ class OrderServiceTest {
       .id(1L)
       .name("Test Product")
       .price(BigDecimal.TEN)
-      .quantity(5)
+      .totalStock(5)
       .build();
     CartItem cartItem = CartItem.builder()
       .product(testProduct)

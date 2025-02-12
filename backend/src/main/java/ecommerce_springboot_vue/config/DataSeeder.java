@@ -114,7 +114,7 @@ public class DataSeeder {
       .name("Smartphone X")
       .description("Latest generation smartphone with 5G")
       .price(new BigDecimal("999.99"))
-      .quantity(50)
+      .totalStock(50)
       .categories(new HashSet<>(Arrays.asList(electronics)))
       .imageUrl("/images/smartphone.webp")
       .build());
@@ -123,7 +123,7 @@ public class DataSeeder {
       .name("Laptop Pro")
       .description("Professional laptop for developers")
       .price(new BigDecimal("1499.99"))
-      .quantity(30)
+      .totalStock(30)
       .categories(new HashSet<>(Arrays.asList(electronics)))
       .imageUrl("/images/laptop.webp")
       .build());
@@ -132,7 +132,7 @@ public class DataSeeder {
       .name("Wireless Earbuds")
       .description("High-quality wireless earbuds with noise cancellation")
       .price(new BigDecimal("199.99"))
-      .quantity(100)
+      .totalStock(100)
       .categories(new HashSet<>(Arrays.asList(electronics)))
       .imageUrl("/images/earbuds.jpg")
       .build());
@@ -141,7 +141,7 @@ public class DataSeeder {
       .name("4K Smart TV")
       .description("55-inch 4K Smart TV with HDR")
       .price(new BigDecimal("699.99"))
-      .quantity(25)
+      .totalStock(25)
       .categories(new HashSet<>(Arrays.asList(electronics)))
       .imageUrl("/images/tv.jpg")
       .build());
@@ -150,7 +150,7 @@ public class DataSeeder {
       .name("Gaming Console")
       .description("Next-gen gaming console with 4K graphics")
       .price(new BigDecimal("499.99"))
-      .quantity(40)
+      .totalStock(40)
       .categories(new HashSet<>(Arrays.asList(electronics)))
       .imageUrl("/images/console.jpg")
       .build());
@@ -159,7 +159,7 @@ public class DataSeeder {
       .name("Tablet Pro")
       .description("Professional tablet with stylus support")
       .price(new BigDecimal("799.99"))
-      .quantity(35)
+      .totalStock(35)
       .categories(new HashSet<>(Arrays.asList(electronics)))
       .imageUrl("/images/tablet.jpg")
       .build());
@@ -168,7 +168,7 @@ public class DataSeeder {
       .name("Wireless Keyboard")
       .description("Mechanical wireless keyboard with RGB lighting")
       .price(new BigDecimal("149.99"))
-      .quantity(45)
+      .totalStock(45)
       .categories(new HashSet<>(Arrays.asList(electronics)))
       .imageUrl("/images/keyboard.jpg")
       .build());
@@ -177,7 +177,7 @@ public class DataSeeder {
       .name("Digital Drawing Tablet")
       .description("Professional drawing tablet for digital artists")
       .price(new BigDecimal("299.99"))
-      .quantity(30)
+      .totalStock(30)
       .categories(new HashSet<>(Arrays.asList(electronics)))
       .imageUrl("/images/drawing-tablet.jpg")
       .build());
@@ -186,7 +186,7 @@ public class DataSeeder {
       .name("Wireless Mouse")
       .description("Ergonomic wireless mouse with precision tracking")
       .price(new BigDecimal("79.99"))
-      .quantity(65)
+      .totalStock(65)
       .categories(new HashSet<>(Arrays.asList(electronics)))
       .imageUrl("/images/mouse.jpg")
       .build());
@@ -195,7 +195,7 @@ public class DataSeeder {
       .name("Bluetooth Speaker")
       .description("Portable waterproof bluetooth speaker with 24h battery")
       .price(new BigDecimal("159.99"))
-      .quantity(40)
+      .totalStock(40)
       .categories(new HashSet<>(Arrays.asList(electronics)))
       .imageUrl("/images/speaker.jpg")
       .build());
@@ -204,7 +204,7 @@ public class DataSeeder {
       .name("Webcam Pro")
       .description("4K webcam with auto-focus and noise-canceling microphone")
       .price(new BigDecimal("129.99"))
-      .quantity(35)
+      .totalStock(35)
       .categories(new HashSet<>(Arrays.asList(electronics)))
       .imageUrl("/images/webcam.jpg")
       .build());
@@ -214,7 +214,7 @@ public class DataSeeder {
       .name("Cotton T-Shirt")
       .description("Comfortable cotton t-shirt")
       .price(new BigDecimal("29.99"))
-      .quantity(100)
+      .totalStock(100)
       .categories(new HashSet<>(Arrays.asList(clothing)))
       .imageUrl("/images/t-shirt.jpg")
       .build());
@@ -223,7 +223,7 @@ public class DataSeeder {
       .name("Denim Jeans")
       .description("Classic fit denim jeans")
       .price(new BigDecimal("59.99"))
-      .quantity(80)
+      .totalStock(80)
       .categories(new HashSet<>(Arrays.asList(clothing)))
       .imageUrl("/images/jeans.jpg")
       .build());
@@ -232,7 +232,7 @@ public class DataSeeder {
       .name("Winter Jacket")
       .description("Warm winter jacket with water resistance")
       .price(new BigDecimal("129.99"))
-      .quantity(45)
+      .totalStock(45)
       .categories(new HashSet<>(Arrays.asList(clothing)))
       .imageUrl("/images/jacket.jpg")
       .build());
@@ -241,7 +241,7 @@ public class DataSeeder {
       .name("Running Shoes")
       .description("Lightweight running shoes with cushioning")
       .price(new BigDecimal("89.99"))
-      .quantity(60)
+      .totalStock(60)
       .categories(new HashSet<>(Arrays.asList(clothing)))
       .imageUrl("/images/shoes.jpg")
       .build());
@@ -250,7 +250,7 @@ public class DataSeeder {
       .name("Summer Dress")
       .description("Floral summer dress")
       .price(new BigDecimal("49.99"))
-      .quantity(70)
+      .totalStock(70)
       .categories(new HashSet<>(Arrays.asList(clothing)))
       .imageUrl("/images/dress.jpg")
       .build());
@@ -259,7 +259,7 @@ public class DataSeeder {
       .name("Sports Shorts")
       .description("Breathable sports shorts for running and gym")
       .price(new BigDecimal("34.99"))
-      .quantity(120)
+      .totalStock(120)
       .categories(new HashSet<>(Arrays.asList(clothing)))
       .imageUrl("/images/shorts.jpg")
       .build());
@@ -269,7 +269,7 @@ public class DataSeeder {
       .name("Programming Guide")
       .description("Complete programming guide for beginners")
       .price(new BigDecimal("49.99"))
-      .quantity(75)
+      .totalStock(75)
       .categories(new HashSet<>(Arrays.asList(books)))
       .imageUrl("/images/programming-book.jpg")
       .build());
@@ -278,7 +278,7 @@ public class DataSeeder {
       .name("Science Fiction Novel")
       .description("Bestselling sci-fi novel")
       .price(new BigDecimal("19.99"))
-      .quantity(90)
+      .totalStock(90)
       .categories(new HashSet<>(Arrays.asList(books)))
       .imageUrl("/images/scifi-book.jpg")
       .build());
@@ -287,7 +287,7 @@ public class DataSeeder {
       .name("Cookbook")
       .description("International cuisine cookbook")
       .price(new BigDecimal("34.99"))
-      .quantity(55)
+      .totalStock(55)
       .categories(new HashSet<>(Arrays.asList(books)))
       .imageUrl("/images/cookbook.jpg")
       .build());
@@ -296,7 +296,7 @@ public class DataSeeder {
       .name("History Book")
       .description("Comprehensive world history book")
       .price(new BigDecimal("39.99"))
-      .quantity(65)
+      .totalStock(65)
       .categories(new HashSet<>(Arrays.asList(books)))
       .imageUrl("/images/history-book.jpg")
       .build());
@@ -305,7 +305,7 @@ public class DataSeeder {
       .name("Self-Help Book")
       .description("Personal development guide")
       .price(new BigDecimal("24.99"))
-      .quantity(85)
+      .totalStock(85)
       .categories(new HashSet<>(Arrays.asList(books)))
       .imageUrl("/images/selfhelp-book.jpg")
       .build());
@@ -314,7 +314,7 @@ public class DataSeeder {
       .name("Photography Guide")
       .description("Complete guide to digital photography")
       .price(new BigDecimal("44.99"))
-      .quantity(50)
+      .totalStock(50)
       .categories(new HashSet<>(Arrays.asList(books)))
       .imageUrl("/images/photo-book.jpg")
       .build());
@@ -324,7 +324,7 @@ public class DataSeeder {
       .name("E-Reader")
       .description("Digital e-reader with backlight")
       .price(new BigDecimal("129.99"))
-      .quantity(40)
+      .totalStock(40)
       .categories(new HashSet<>(Arrays.asList(electronics, books)))
       .imageUrl("/images/ereader.jpg")
       .build());
@@ -334,7 +334,7 @@ public class DataSeeder {
       .name("Smart Watch")
       .description("Fitness tracking smart watch")
       .price(new BigDecimal("199.99"))
-      .quantity(55)
+      .totalStock(55)
       .categories(new HashSet<>(Arrays.asList(electronics, clothing)))
       .imageUrl("/images/smartwatch.jpg")
       .build());
@@ -343,7 +343,7 @@ public class DataSeeder {
       .name("Smart Glasses")
       .description("AR-enabled smart glasses with HD display")
       .price(new BigDecimal("599.99"))
-      .quantity(25)
+      .totalStock(25)
       .categories(new HashSet<>(Arrays.asList(electronics, clothing)))
       .imageUrl("/images/smart-glasses.jpg")
       .build());

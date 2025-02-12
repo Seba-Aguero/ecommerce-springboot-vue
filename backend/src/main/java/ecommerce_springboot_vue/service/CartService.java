@@ -18,9 +18,11 @@ import ecommerce_springboot_vue.repository.IProductRepository;
 import ecommerce_springboot_vue.repository.IUserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional
 public class CartService {
 
@@ -40,8 +42,8 @@ public class CartService {
     Product product = productRepository.findById(productId)
       .orElseThrow(()->new ResourceNotFoundException("Product not found"));
 
-    if(product.getQuantity()<quantity){
-      throw new InsufficientStockException("Not enough available");
+    if(product.getTotalStock() < quantity){
+      throw new InsufficientStockException("Not enough stock available");
     }
 
     User user = userRepository.findById(userId)
@@ -83,11 +85,14 @@ public class CartService {
 
     switch (operation) {
       case INCREMENT:
+        if (cartItem.getQuantity() + 1 > cartItem.getProduct().getTotalStock()) {
+          throw new InsufficientStockException("Not enough stock available");
+        }
         cartItem.setQuantity(cartItem.getQuantity() + 1);
         break;
       case DECREMENT:
         if (cartItem.getQuantity() > 1) {
-            cartItem.setQuantity(cartItem.getQuantity() - 1);
+          cartItem.setQuantity(cartItem.getQuantity() - 1);
         }
         break;
     }

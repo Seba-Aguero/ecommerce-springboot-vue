@@ -5,11 +5,13 @@ import { useAuthStore } from "@/stores/authStore";
 export const useCartStore = defineStore("cart", {
   state: () => ({
     userId: null,
+    // These items are actually the products in the cart
     items: JSON.parse(localStorage.getItem("cart")) || [],
   }),
 
   getters: {
-    totalItems: (state) => state.items.reduce((sum, item) => sum + item.quantity, 0),
+    totalItems: (state) =>
+      state.items.reduce((sum, item) => sum + item.quantity, 0),
     totalAmount: (state) =>
       state.items.reduce((sum, item) => sum + item.price * item.quantity, 0),
   },

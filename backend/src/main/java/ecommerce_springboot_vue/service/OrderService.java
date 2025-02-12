@@ -73,13 +73,13 @@ public class OrderService {
 			Product product = productRepository.findById(cartItem.getProduct().getId())
 				.orElseThrow(()-> new EntityNotFoundException("Product not found with id: "+cartItem.getProduct().getId()));
 
-			if(product.getQuantity() == null){
+			if(product.getTotalStock() == null){
 				throw new IllegalStateException("Product quantity is not set for product "+product.getName());
 			}
-			if(product.getQuantity() < cartItem.getQuantity()){
+			if(product.getTotalStock() < cartItem.getQuantity()){
 				throw new InsufficientStockException("Not enough stock for product "+product.getName());
 			}
-			product.setQuantity(product.getQuantity() - cartItem.getQuantity());
+			product.setTotalStock(product.getTotalStock() - cartItem.getQuantity());
 			productRepository.save(product);
 
 			return OrderItem.builder()
