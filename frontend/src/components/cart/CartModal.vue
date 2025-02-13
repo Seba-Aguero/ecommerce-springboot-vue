@@ -73,7 +73,7 @@
             <div class="flex justify-end">
               <button
                 @click="handleRemoveFromCart(item.id)"
-                class="text-red-500 hover:text-red-700"
+                class="text-red-500 hover:text-red-400 duration-0"
               >
                 <Trash2 class="h-4 w-4" />
               </button>
@@ -88,29 +88,36 @@
       </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Total and footer buttons -->
     <div
-      class="absolute bottom-0 left-0 right-0 p-4 border-t dark:border-gray-700 bg-white dark:bg-gray-800"
+      class="absolute bottom-0 w-full p-4 border-t dark:border-gray-700 bg-white dark:bg-gray-800 flex flex-col gap-y-3"
     >
-      <div class="flex justify-between mb-4">
-        <span class="text-gray-600 dark:text-gray-300">Total:</span>
-        <span class="font-semibold text-gray-900 dark:text-white">
+      <div class="flex justify-between">
+        <span class="font-semibold text-gray-600 dark:text-gray-300">Total:</span>
+        <span class="font-bold text-gray-900 dark:text-white">
           ${{ cartStore.totalAmount.toFixed(2) }}
         </span>
       </div>
-      <router-link
-        to="/cart"
-        class="block w-full bg-primary-600 text-white text-center py-2 rounded-md hover:bg-primary-700"
-        @click="$emit('close')"
-      >
-        View Cart
-      </router-link>
+      <div class="flex gap-x-2">
+        <button
+          @click="proceedToCheckout"
+          class="bg-primary-600 text-white w-[70%] md:w-3/4 px-2 py-1 md:px-4 md:py-2 rounded hover:bg-primary-700 flex items-center gap-x-2 justify-center"
+        >
+          <CreditCard class="h-4 w-4"/> Checkout
+        </button>
+        <button
+          @click="clearCart"
+          class="bg-red-700 text-white w-[30%] md:w-1/4 px-1 py-1 md:px-2 rounded hover:bg-red-800 flex items-center gap-x-2 justify-center"
+        >
+          <Trash2 class="h-4 w-4"/> Clear
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { X, Trash2, Plus, Minus } from "lucide-vue-next";
+import { X, Trash2, Plus, Minus, CreditCard } from "lucide-vue-next";
 import { useCartStore } from "@/stores/cartStore";
 import { useToast } from "vue-toastification";
 
