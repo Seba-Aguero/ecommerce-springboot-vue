@@ -1,7 +1,7 @@
 <template>
   <AuthCard>
     <div class="flex items-center justify-center mb-8">
-      <ShoppingBag class="h-12 w-12 text-primary-500" />
+      <ShoppingBag class="h-12 w-12 text-primary-500" aria-hidden="true" />
       <h1
         class="text-3xl font-bold ml-2 bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-purple-600"
       >
@@ -28,6 +28,7 @@
             />
             <User
               class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+              aria-hidden="true"
             />
           </div>
         </div>
@@ -48,6 +49,7 @@
             />
             <User
               class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+              aria-hidden="true"
             />
           </div>
         </div>
@@ -71,6 +73,7 @@
           />
           <Mail
             class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+            aria-hidden="true"
           />
         </div>
       </div>
@@ -92,14 +95,15 @@
           />
           <Lock
             class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+            aria-hidden="true"
           />
           <button
             type="button"
             class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
             @click="showPassword = !showPassword"
           >
-            <Eye v-if="!showPassword" class="h-5 w-5" />
-            <EyeOff v-else class="h-5 w-5" />
+            <Eye v-if="!showPassword" class="h-5 w-5" aria-hidden="true" />
+            <EyeOff v-else class="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -121,14 +125,15 @@
           />
           <Lock
             class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+            aria-hidden="true"
           />
           <button
             type="button"
             class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
             @click="showConfirmPassword = !showConfirmPassword"
           >
-            <Eye v-if="!showConfirmPassword" class="h-5 w-5" />
-            <EyeOff v-else class="h-5 w-5" />
+            <Eye v-if="!showConfirmPassword" class="h-5 w-5" aria-hidden="true" />
+            <EyeOff v-else class="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
         <p
@@ -146,10 +151,7 @@
           required
           class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
         />
-        <label
-          for="terms"
-          class="ml-2 block text-sm text-gray-700 dark:text-gray-100"
-        >
+        <label for="terms" class="ml-2 block text-sm text-gray-700 dark:text-gray-100">
           I agree to the
           <a
             href="#"
@@ -164,15 +166,14 @@
         <button
           type="submit"
           :disabled="
-            loading ||
-            (password && confirmPassword && password !== confirmPassword)
+            loading || (password && confirmPassword && password !== confirmPassword)
           "
           class="w-full bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 text-white font-semibold py-3 px-6 rounded-md transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center disabled:opacity-50"
         >
           <ButtonSpinner v-if="loading"> Creating Account... </ButtonSpinner>
           <span class="flex items-center" v-else>
             Create Account
-            <ArrowRight class="ml-2 h-5 w-5" />
+            <ArrowRight class="ml-2 h-5 w-5" aria-hidden="true" />
           </span>
         </button>
       </div>
@@ -196,15 +197,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
-import {
-  ShoppingBag,
-  Mail,
-  Lock,
-  ArrowRight,
-  User,
-  Eye,
-  EyeOff,
-} from "lucide-vue-next";
+import { ShoppingBag, Mail, Lock, ArrowRight, User, Eye, EyeOff } from "lucide-vue-next";
 import AuthCard from "@/components/auth/AuthCard.vue";
 import { useToast } from "vue-toastification";
 import ButtonSpinner from "@/components/common/ButtonSpinner.vue";

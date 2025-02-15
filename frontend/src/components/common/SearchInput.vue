@@ -7,23 +7,23 @@
       :placeholder="placeholder"
       class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
     />
-    <Search class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+    <Search class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" aria-hidden="true" />
   </div>
 </template>
 
 <script setup>
-import { Search } from 'lucide-vue-next';
+import { Search } from "lucide-vue-next";
 
 defineProps({
   modelValue: {
     type: String,
-    default: ''
+    default: "",
   },
   placeholder: {
     type: String,
-    default: 'Search...'
-  }
+    default: "Search...",
+  },
 });
 
-defineEmits(['update:modelValue']);
+defineEmits(["update:modelValue"]);
 </script>

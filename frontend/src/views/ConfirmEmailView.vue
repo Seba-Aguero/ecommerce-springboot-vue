@@ -3,7 +3,7 @@
     <div class="flex flex-col items-center justify-center space-y-6">
       <!-- Icon and Title -->
       <div class="text-center">
-        <Mail class="h-16 w-16 text-primary-500 mx-auto mb-4" />
+        <Mail class="h-16 w-16 text-primary-500 mx-auto mb-4" aria-hidden="true" />
         <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
           Confirm your email
         </h1>
@@ -13,9 +13,7 @@
       <div class="text-center space-y-4">
         <p class="text-gray-600 dark:text-gray-300">
           We've sent a confirmation code to
-          <span class="font-medium text-gray-900 dark:text-white">{{
-            email
-          }}</span>
+          <span class="font-medium text-gray-900 dark:text-white">{{ email }}</span>
         </p>
       </div>
 
@@ -44,6 +42,7 @@
             />
             <KeyRound
               class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+              aria-hidden="true"
             />
           </div>
         </div>

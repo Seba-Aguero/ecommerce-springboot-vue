@@ -1,7 +1,7 @@
 <template>
   <AuthCard>
     <div class="flex items-center justify-center mb-8">
-      <ShoppingBag class="h-12 w-12 text-primary-500" />
+      <ShoppingBag class="h-12 w-12 text-primary-500" aria-hidden="true" />
       <h1
         class="text-3xl font-bold ml-2 bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-purple-600"
       >
@@ -29,6 +29,7 @@
             />
             <Mail
               class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+              aria-hidden="true"
             />
           </div>
         </div>
@@ -51,6 +52,7 @@
             />
             <Lock
               class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
+              aria-hidden="true"
             />
           </div>
         </div>
@@ -87,7 +89,7 @@
         <ButtonSpinner v-if="loading"> Logging in... </ButtonSpinner>
         <span class="flex items-center" v-else>
           Log In
-          <ArrowRight class="ml-2 h-5 w-5" />
+          <ArrowRight class="ml-2 h-5 w-5" aria-hidden="true" />
         </span>
       </button>
 

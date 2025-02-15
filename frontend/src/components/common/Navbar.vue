@@ -5,7 +5,7 @@
         <!-- Logo -->
         <div class="flex items-center">
           <router-link to="/" class="flex items-center" aria-label="Home">
-            <ShoppingBag class="h-8 w-8 text-primary-500" />
+            <ShoppingBag class="h-8 w-8 text-primary-500" aria-hidden="true" />
             <span
               class="ml-2 text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-purple-600"
             >
@@ -23,8 +23,8 @@
             :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
             aria-label="Toggle Theme"
           >
-            <Sun v-if="isDark" class="h-5 w-5 no-transition" />
-            <Moon v-else class="h-5 w-5 no-transition" />
+            <Sun v-if="isDark" class="h-5 w-5 no-transition" aria-hidden="true" />
+            <Moon v-else class="h-5 w-5 no-transition" aria-hidden="true" />
           </button>
 
           <!-- Cart -->
@@ -34,7 +34,7 @@
             class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium relative"
             aria-label="Cart"
           >
-            <ShoppingCart class="h-5 w-5 inline-block no-transition" />
+            <ShoppingCart class="h-5 w-5 inline-block no-transition" aria-hidden="true" />
             <span
               v-if="cartStore.totalItems"
               class="absolute -top-1 -right-1 bg-primary-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
@@ -50,7 +50,7 @@
               class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium flex items-center"
               aria-label="User Menu"
             >
-              <User class="h-5 w-5 mr-1 no-transition" />
+              <User class="h-5 w-5 mr-1 no-transition" aria-hidden="true" />
             </button>
 
             <div
@@ -103,8 +103,8 @@
             :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
             aria-label="Toggle Theme"
           >
-            <Sun v-if="isDark" class="h-5 w-5 no-transition" />
-            <Moon v-else class="h-5 w-5 no-transition" />
+            <Sun v-if="isDark" class="h-5 w-5 no-transition" aria-hidden="true" />
+            <Moon v-else class="h-5 w-5 no-transition" aria-hidden="true" />
           </button>
 
           <!-- Cart for Mobile -->
@@ -114,7 +114,7 @@
             class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium relative"
             aria-label="Cart"
           >
-            <ShoppingCart class="h-5 w-5 inline-block no-transition" />
+            <ShoppingCart class="h-5 w-5 inline-block no-transition" aria-hidden="true" />
             <span
               v-if="cartStore.totalItems"
               class="absolute -top-1 -right-1 bg-primary-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
@@ -129,8 +129,8 @@
             class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
             aria-label="Open main menu"
           >
-            <Menu v-if="!isMobileMenuOpen" class="block h-6 w-6" />
-            <X v-else class="block h-6 w-6" />
+            <Menu v-if="!isMobileMenuOpen" class="block h-6 w-6" aria-hidden="true" />
+            <X v-else class="block h-6 w-6" aria-hidden="true" />
           </button>
         </div>
       </div>

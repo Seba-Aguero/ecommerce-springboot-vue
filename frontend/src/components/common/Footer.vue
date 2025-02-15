@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-white dark:bg-gray-800 border-t mt-auto">
+  <footer class="bg-white dark:bg-gray-800 border-t mt-8">
     <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between flex-wrap gap-8">
         <!-- Useful Links -->
@@ -10,13 +10,25 @@
             Useful Links
           </h3>
           <div class="mt-4 space-y-2">
-            <a href="#" class="text-gray-500 dark:text-gray-300 hover:text-gray-900 block" aria-label="About Us">
+            <a
+              href="#"
+              class="text-gray-500 dark:text-gray-300 hover:text-gray-900 block"
+              aria-label="About Us"
+            >
               About Us
             </a>
-            <a href="#" class="text-gray-500 dark:text-gray-300 hover:text-gray-900 block" aria-label="Terms & Conditions">
+            <a
+              href="#"
+              class="text-gray-500 dark:text-gray-300 hover:text-gray-900 block"
+              aria-label="Terms & Conditions"
+            >
               Terms & Conditions
             </a>
-            <a href="#" class="text-gray-500 dark:text-gray-300 hover:text-gray-900 block" aria-label="Privacy Policy">
+            <a
+              href="#"
+              class="text-gray-500 dark:text-gray-300 hover:text-gray-900 block"
+              aria-label="Privacy Policy"
+            >
               Privacy Policy
             </a>
           </div>
@@ -72,5 +84,5 @@
 </template>
 
 <script setup>
-import { Mail, Phone } from 'lucide-vue-next';
+import { Mail, Phone } from "lucide-vue-next";
 </script>

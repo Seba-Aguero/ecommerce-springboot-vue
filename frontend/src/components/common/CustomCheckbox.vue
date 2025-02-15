@@ -12,7 +12,7 @@
         'bg-primary-500 border-primary-500': modelValue
       }"
     >
-      <Check v-show="modelValue" class="h-3 w-3 text-white" />
+      <Check v-show="modelValue" class="h-3 w-3 text-white" aria-hidden="true" />
     </div>
     <span class="ml-3 text-sm text-gray-600 dark:text-gray-300">
       <slot></slot>

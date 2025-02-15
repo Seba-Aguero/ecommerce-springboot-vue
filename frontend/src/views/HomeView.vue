@@ -16,8 +16,8 @@
         <p
           class="mt-3 max-w-md mx-auto text-base text-gray-500 dark:text-gray-400 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl"
         >
-          Discover a new way to shop online. Quality products, competitive
-          prices, and an exceptional user experience.
+          Discover a new way to shop online. Quality products, competitive prices, and an
+          exceptional user experience.
         </p>
         <div class="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
           <div class="rounded-md shadow">
@@ -37,14 +37,10 @@
     <div id="features" class="py-12 bg-white dark:bg-gray-800">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
-          <h2
-            class="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl"
-          >
+          <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
             Why Choose Us?
           </h2>
-          <p
-            class="mt-4 max-w-2xl text-xl text-gray-500 dark:text-gray-400 mx-auto"
-          >
+          <p class="mt-4 max-w-2xl text-xl text-gray-500 dark:text-gray-400 mx-auto">
             Discover the advantages of shopping with us.
           </p>
         </div>
@@ -52,15 +48,14 @@
         <div class="mt-12">
           <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
             <div class="flex flex-col items-center">
-              <Truck class="h-12 w-12 text-primary-500 dark:text-primary-400" aria-hidden="true" />
-              <h3
-                class="mt-6 text-xl font-medium text-gray-900 dark:text-white"
-              >
+              <Truck
+                class="h-12 w-12 text-primary-500 dark:text-primary-400"
+                aria-hidden="true"
+              />
+              <h3 class="mt-6 text-xl font-medium text-gray-900 dark:text-white">
                 Fast Shipping
               </h3>
-              <p
-                class="mt-2 text-base text-gray-500 dark:text-gray-400 text-center"
-              >
+              <p class="mt-2 text-base text-gray-500 dark:text-gray-400 text-center">
                 24-48 hour delivery for most products.
               </p>
             </div>
@@ -69,14 +64,10 @@
                 class="h-12 w-12 text-primary-500 dark:text-primary-400"
                 aria-hidden="true"
               />
-              <h3
-                class="mt-6 text-xl font-medium text-gray-900 dark:text-white"
-              >
+              <h3 class="mt-6 text-xl font-medium text-gray-900 dark:text-white">
                 Secure Shopping
               </h3>
-              <p
-                class="mt-2 text-base text-gray-500 dark:text-gray-400 text-center"
-              >
+              <p class="mt-2 text-base text-gray-500 dark:text-gray-400 text-center">
                 Encrypted transactions and guaranteed data protection.
               </p>
             </div>
@@ -85,14 +76,10 @@
                 class="h-12 w-12 text-primary-500 dark:text-primary-400"
                 aria-hidden="true"
               />
-              <h3
-                class="mt-6 text-xl font-medium text-gray-900 dark:text-white"
-              >
+              <h3 class="mt-6 text-xl font-medium text-gray-900 dark:text-white">
                 24/7 Support
               </h3>
-              <p
-                class="mt-2 text-base text-gray-500 dark:text-gray-400 text-center"
-              >
+              <p class="mt-2 text-base text-gray-500 dark:text-gray-400 text-center">
                 Our customer service team is always available.
               </p>
             </div>
@@ -112,15 +99,14 @@
 
         <LoadingSpinner v-if="loading" size="lg" />
 
-        <div
-          v-else
-          class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
-        >
+        <div v-else class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <ProductCard
             v-for="product in featuredProducts"
             :key="product.id"
             :product="product"
-            @view-product="router.push({ name: 'ProductDetail', params: { id: product.id } })"
+            @view-product="
+              router.push({ name: 'ProductDetail', params: { id: product.id } })
+            "
             aria-label="Product Card"
           />
         </div>
@@ -131,9 +117,7 @@
     <div id="contact" class="py-12 bg-white dark:bg-gray-800">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
-          <h2
-            class="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl"
-          >
+          <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
             Contact Us
           </h2>
           <p class="mt-4 text-lg text-gray-500 dark:text-gray-400">
