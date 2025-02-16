@@ -5,7 +5,7 @@
   >
     <div class="w-full max-w-md my-14">
       <div
-        class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-2xl transform transition-all duration-300 ease-in-out hover:scale-105"
+        class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-2xl transform transition-all duration-500 ease-in-out hover:scale-105"
       >
         <slot></slot>
       </div>

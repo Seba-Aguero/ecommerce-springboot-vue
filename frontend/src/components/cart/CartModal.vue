@@ -103,7 +103,7 @@
         </div>
         <div class="flex gap-x-2">
           <button
-            @click="router.push('/checkout')"
+            @click="handleCheckout"
             class="bg-primary-600 text-white w-[70%] md:w-3/4 px-2 py-1 md:px-4 md:py-2 rounded hover:bg-primary-700 flex items-center gap-x-2 justify-center"
           >
             <CreditCard class="h-4 w-4" aria-hidden="true" /> Checkout
@@ -165,7 +165,7 @@ defineProps({
   },
 });
 
-defineEmits(["close"]);
+const emit = defineEmits(["close"]);
 
 const handleIncrementQuantity = async (productId) => {
   try {
@@ -188,6 +188,15 @@ const handleRemoveFromCart = async (productId) => {
     await cartStore.removeFromCart(productId);
   } catch (error) {
     toast.error("Failed to remove item from cart. Please try again.");
+  }
+};
+
+const handleCheckout = () => {
+  if (cartStore.items.length) {
+    emit("close");
+    router.push("/checkout");
+  } else {
+    toast.error("Your cart is empty!");
   }
 };
 

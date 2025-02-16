@@ -24,27 +24,16 @@
         aria-label="Confirmation Code Form"
       >
         <div>
-          <label
-            for="confirmationCode"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1"
-          >
-            Confirmation Code
-          </label>
-          <div class="relative">
-            <input
-              id="confirmationCode"
-              v-model="confirmationCode"
-              type="text"
-              maxlength="6"
-              class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white text-center text-lg tracking-widest"
-              placeholder="000000"
-              required
-            />
-            <KeyRound
-              class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5"
-              aria-hidden="true"
-            />
-          </div>
+          <Label for="confirmationCode">Confirmation Code</Label>
+          <Input
+            id="confirmationCode"
+            v-model="confirmationCode"
+            type="text"
+            maxlength="6"
+            placeholder="000000"
+            required
+            :icon="KeyRound"
+          />
         </div>
 
         <!-- Error Message -->
@@ -85,6 +74,8 @@ import { useAuthStore } from "@/stores/authStore";
 import { useCartStore } from "@/stores/cartStore";
 import { Mail, KeyRound } from "lucide-vue-next";
 import AuthCard from "@/components/auth/AuthCard.vue";
+import Input from "@/components/common/Input.vue";
+import Label from "@/components/common/Label.vue";
 import { useToast } from "vue-toastification";
 import ButtonSpinner from "@/components/common/ButtonSpinner.vue";
 

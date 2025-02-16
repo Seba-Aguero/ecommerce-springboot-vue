@@ -32,6 +32,11 @@ const routes = [
     name: "ConfirmEmail",
     component: () => import("@/views/ConfirmEmailView.vue"),
   },
+  {
+    path: "/checkout",
+    name: "checkout",
+    component: () => import("@/views/CheckoutView.vue"),
+  },
   // {
   //   path: "/about",
   //   name: "about",
@@ -41,11 +46,6 @@ const routes = [
   //   path: "/contact",
   //   name: "contact",
   //   component: () => import("@/views/ContactView.vue"),
-  // },
-  // {
-  //   path: "/checkout",
-  //   name: "checkout",
-  //   component: () => import("@/views/CheckoutView.vue"),
   // },
 ];
 
