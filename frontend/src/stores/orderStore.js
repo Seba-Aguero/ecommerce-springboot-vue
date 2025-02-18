@@ -7,7 +7,12 @@ export const useOrderStore = defineStore("orders", {
     currentOrder: null,
     loading: false,
     error: null,
+    lastOrderCompleted: false,
   }),
+
+  getters: {
+    isOrderCompleted: (state) => state.lastOrderCompleted && state.currentOrder !== null,
+  },
 
   actions: {
     async createOrder(orderData) {
@@ -15,6 +20,7 @@ export const useOrderStore = defineStore("orders", {
       try {
         const response = await orderService.createOrder(orderData);
         this.currentOrder = response.data;
+        this.lastOrderCompleted = true;
         return response.data;
       } catch (error) {
         this.error = error.message;
@@ -48,6 +54,11 @@ export const useOrderStore = defineStore("orders", {
       } finally {
         this.loading = false;
       }
+    },
+
+    resetOrderStatus() {
+      this.lastOrderCompleted = false;
+      this.currentOrder = null;
     },
   },
 });
