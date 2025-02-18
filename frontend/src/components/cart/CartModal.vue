@@ -83,7 +83,7 @@
               </div>
               <div class="py-1">
                 <p class="font-semibold text-gray-500 dark:text-gray-300 mt-2">
-                  ${{ (item.price * item.quantity).toFixed(2) }}
+                  ${{ formatPrice(item.price * item.quantity) }}
                 </p>
               </div>
             </div>
@@ -98,7 +98,7 @@
         <div class="flex justify-between">
           <span class="font-semibold text-gray-600 dark:text-gray-300">Total:</span>
           <span class="font-bold text-gray-900 dark:text-white">
-            ${{ cartStore.totalAmount.toFixed(2) }}
+            ${{ formatPrice(cartStore.totalAmount) }}
           </span>
         </div>
         <div class="flex gap-x-2">
@@ -150,8 +150,9 @@
 import { ref } from "vue";
 import { X, Trash2, Plus, Minus, CreditCard } from "lucide-vue-next";
 import { useCartStore } from "@/stores/cartStore";
-import { useToast } from "vue-toastification";
 import { useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
+import { formatPrice } from "@/utils/formatters";
 
 const router = useRouter();
 const cartStore = useCartStore();

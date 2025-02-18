@@ -97,6 +97,7 @@ import { useProductStore } from "@/stores/productStore";
 import { useCartStore } from "@/stores/cartStore";
 import LoadingSpinner from "@/components/common/LoadingSpinner.vue";
 import { useToast } from "vue-toastification";
+import { formatPrice } from '@/utils/formatters';
 
 const route = useRoute();
 const toast = useToast();
@@ -109,10 +110,6 @@ onBeforeRouteUpdate(async (to, from) => {
     await productStore.fetchProductById(to.params.id);
   }
 });
-
-const formatPrice = (price) => {
-  return price?.toFixed(2) ?? "0.00";
-};
 
 const isProductAvailable = computed(
   () => productStore.currentProduct && productStore.currentProduct.totalStock > 0

@@ -45,14 +45,11 @@
 </template>
 
 <script setup>
+import { formatPrice } from '@/utils/formatters';
 defineProps({
   product: {
     type: Object,
     required: true,
   },
 });
-
-const formatPrice = (price) => {
-  return price.toFixed(2);
-};
 </script>
