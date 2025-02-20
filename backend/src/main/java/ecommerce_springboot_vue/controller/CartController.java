@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ecommerce_springboot_vue.dto.CartDto;
-import ecommerce_springboot_vue.dto.CartItemDto;
+import ecommerce_springboot_vue.dto.request.cart.AddCartItemRequest;
 import ecommerce_springboot_vue.enums.CartOperation;
 import ecommerce_springboot_vue.service.CartService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,9 +41,13 @@ public class CartController {
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<CartDto> addToCart(
     @PathVariable Long userId,
-    @RequestBody CartItemDto cartItemDto)
+    @RequestBody AddCartItemRequest request)
   {
-    CartDto cartDto = cartService.addToCart(userId, cartItemDto.getProductId(), cartItemDto.getQuantity());
+    CartDto cartDto = cartService.addToCart(
+      userId,
+      request.getProductId(),
+      request.getQuantity()
+    );
     return ResponseEntity.status(HttpStatus.CREATED).body(cartDto);
   }
 

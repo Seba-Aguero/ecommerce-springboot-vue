@@ -2,12 +2,12 @@ package ecommerce_springboot_vue.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import ecommerce_springboot_vue.dto.OrderDto;
 import ecommerce_springboot_vue.dto.request.order.CreateOrderRequest;
 import ecommerce_springboot_vue.dto.request.order.UpdateOrderStatusRequest;
 import ecommerce_springboot_vue.service.OrderService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
-
 
 @RestController
 @RequiredArgsConstructor

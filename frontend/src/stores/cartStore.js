@@ -24,7 +24,7 @@ export const useCartStore = defineStore("cart", {
 
     async addToCart(product, quantity = 1) {
       try {
-        await cartService.addToCart(this.userId, product, quantity);
+        await cartService.addToCart(this.userId, product.id, quantity);
         const existingItem = this.items.find((item) => item.id === product.id);
         if (existingItem) {
           existingItem.quantity += quantity;

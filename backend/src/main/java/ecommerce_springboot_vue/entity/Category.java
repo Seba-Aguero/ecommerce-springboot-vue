@@ -27,12 +27,6 @@ import lombok.Builder.Default;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.FetchType;
 
-// @Entity
-// @Data
-// @Builder
-// @AllArgsConstructor
-// @NoArgsConstructor
-// @Table(name = "categories")
 @Entity
 @Getter
 @Setter

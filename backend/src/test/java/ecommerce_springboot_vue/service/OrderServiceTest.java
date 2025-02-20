@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
 
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ecommerce_springboot_vue.dto.CartDto;
 import ecommerce_springboot_vue.dto.CartItemDto;
 import ecommerce_springboot_vue.dto.OrderDto;
+import ecommerce_springboot_vue.dto.ProductDto;
 import ecommerce_springboot_vue.entity.Cart;
 import ecommerce_springboot_vue.entity.CartItem;
 import ecommerce_springboot_vue.entity.Order;
@@ -28,6 +30,7 @@ import ecommerce_springboot_vue.entity.Product;
 import ecommerce_springboot_vue.entity.User;
 import ecommerce_springboot_vue.mapper.CartMapper;
 import ecommerce_springboot_vue.mapper.OrderMapper;
+import ecommerce_springboot_vue.repository.IOrderItemRepository;
 import ecommerce_springboot_vue.repository.IOrderRepository;
 import ecommerce_springboot_vue.repository.IProductRepository;
 import ecommerce_springboot_vue.repository.IUserRepository;
@@ -36,6 +39,9 @@ import ecommerce_springboot_vue.repository.IUserRepository;
 class OrderServiceTest {
   @Mock
   private IOrderRepository orderRepository;
+
+  @Mock
+  private IOrderItemRepository orderItemRepository;
 
   @Mock
   private IUserRepository userRepository;
@@ -109,13 +115,19 @@ class OrderServiceTest {
       .price(BigDecimal.TEN)
       .totalStock(5)
       .build();
+    ProductDto testProductDto = ProductDto.builder()
+      .id(1L)
+      .name("Test Product")
+      .price(BigDecimal.TEN)
+      .totalStock(5)
+      .build();
     CartItem cartItem = CartItem.builder()
       .product(testProduct)
       .quantity(2)
       .build();
     testCart.getCartItems().add(cartItem);
     testCartDto.getCartItems().add(CartItemDto.builder()
-      .productId(1L)
+      .product(testProductDto)
       .quantity(2)
       .build());
     when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
@@ -130,6 +142,7 @@ class OrderServiceTest {
     assertNotNull(result);
     assertEquals(testOrderDto.getAddress(), result.getAddress());
     verify(orderRepository).save(any(Order.class));
+    verify(orderItemRepository).saveAll(anyList());
     verify(cartService).clearCart(1L);
     verify(emailService).sendOrderConfirmation(any(Order.class));
     verify(productRepository).findById(1L);

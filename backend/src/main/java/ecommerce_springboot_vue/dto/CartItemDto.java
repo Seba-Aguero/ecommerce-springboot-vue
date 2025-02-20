@@ -15,7 +15,7 @@ public class CartItemDto {
 
   private Long id;
 
-  private Long productId;
+  private ProductDto product;
 
   @NotNull(message = "Quantity can not be null")
   @PositiveOrZero(message = "Quantity can not be negative")

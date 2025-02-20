@@ -1,9 +1,9 @@
 import api from "@/services/api";
 
 export const cartService = {
-  async addToCart(userId, product, quantity = 1) {
+  async addToCart(userId, productId, quantity = 1) {
     return await api.post(`/api/v1/cart/${userId}/items`, {
-      productId: product.id,
+      productId,
       quantity,
     });
   },
