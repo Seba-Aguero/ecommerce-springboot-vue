@@ -33,21 +33,21 @@ public class CartService {
 
   public CartDto getCartByUserId(Long userId) {
     Cart cart = cartRepository.findByUserId(userId)
-      .orElseThrow(() -> new RuntimeException("Cart not found"));
+        .orElseThrow(() -> new RuntimeException("Cart not found"));
 
     return cartMapper.entityToDto(cart);
   }
 
   public CartDto addToCart(Long userId, Long productId, Integer quantity) {
     Product product = productRepository.findById(productId)
-      .orElseThrow(()->new ResourceNotFoundException("Product not found"));
+      .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-    if(product.getTotalStock() < quantity){
+    if (product.getTotalStock() < quantity) {
       throw new InsufficientStockException("Not enough stock available");
     }
 
     User user = userRepository.findById(userId)
-      .orElseThrow(()->new ResourceNotFoundException("User not found"));
+      .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
     Cart cart = cartRepository.findByUserId(userId)
       .orElse(Cart.builder()
@@ -58,15 +58,15 @@ public class CartService {
       .filter(item -> item.getProduct().getId().equals(productId))
       .findFirst();
 
-    if(existingCartItem.isPresent()){
+    if (existingCartItem.isPresent()) {
       CartItem cartItem = existingCartItem.get();
-      cartItem.setQuantity(cartItem.getQuantity()+quantity);
-    }else{
+      cartItem.setQuantity(cartItem.getQuantity() + quantity);
+    } else {
       CartItem cartItem = CartItem.builder()
-      .cart(cart)
-      .product(product)
-      .quantity(quantity)
-      .build();
+        .cart(cart)
+        .product(product)
+        .quantity(quantity)
+        .build();
       cart.getCartItems().add(cartItem);
     }
 
@@ -110,11 +110,13 @@ public class CartService {
     cartRepository.save(cart);
   }
 
-  public void clearCart(Long userId){
+  public void clearCart(Long userId) {
     Cart cart = cartRepository.findByUserId(userId)
-      .orElseThrow(()->new RuntimeException("Cart not found"));
+      .orElseThrow(() -> new RuntimeException("Cart not found"));
+
 
     cart.getCartItems().clear();
+
     cartRepository.save(cart);
   }
 }
