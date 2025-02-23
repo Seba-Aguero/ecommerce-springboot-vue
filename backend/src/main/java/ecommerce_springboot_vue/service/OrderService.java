@@ -6,6 +6,7 @@ import ecommerce_springboot_vue.dto.OrderItemDto;
 import ecommerce_springboot_vue.exception.InsufficientStockException;
 import ecommerce_springboot_vue.exception.ResourceNotFoundException;
 import ecommerce_springboot_vue.mapper.CartMapper;
+import ecommerce_springboot_vue.mapper.OrderItemMapper;
 import ecommerce_springboot_vue.mapper.OrderMapper;
 import ecommerce_springboot_vue.entity.*;
 import ecommerce_springboot_vue.repository.IOrderItemRepository;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 
 import java.math.BigDecimal;
@@ -37,22 +39,19 @@ public class OrderService {
 	private final EmailService emailService;
 	private final OrderMapper orderMapper;
 	private final CartMapper cartMapper;
+  private final OrderItemMapper orderItemMapper;
+
+  @Value("${app.order.shipping-cost}")
+  private BigDecimal shippingCost;
 
 	public OrderDto createOrder(Long userId, String address, String phone){
-		// log.info("Starting order creation for user ID: {}", userId);
 
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new ResourceNotFoundException("User not found"));
-		// log.info("Found user: {}", user.getEmail());
 
 		CartDto cartDto = cartService.getCartByUserId(userId);
-		// log.info("Retrieved cart for user. Cart items count: {}", cartDto.getCartItems().size());
-
 		Cart cart = cartMapper.dtoToEntity(cartDto);
-		// log.info("Mapped CartDto to Cart entity. Items count after mapping: {}", cart.getCartItems().size());
-
 		if(cart.getCartItems().isEmpty()){
-			// log.warn("Attempted to create order with empty cart for user: {}", userId);
 			throw new IllegalStateException("Can not create an order with an empty cart");
 		}
 
@@ -63,86 +62,34 @@ public class OrderService {
 			.status(Order.OrderStatus.PREPARING)
 			.build();
 
-    // log.info("Creating order items from cart items. Cart items count: {}",
-      // cart.getCartItems().size());
-
 		List<OrderItem> orderItems = createOrderItems(cart, order);
 
-    // log.info("Created order items. Order items count: {}", orderItems.size());
-
-		// order.setOrderItems(orderItems);
-
-    // log.info("Calculating total amount for order");
-
-    BigDecimal totalAmount = calculateTotalAmount(orderItems);
-
-    // log.info("Total amount calculated: {}", totalAmount);
-
-    order.setTotalAmount(totalAmount);
-
-    // log.info("Saving order to database");
+    BigDecimal subtotal = calculateSubtotal(orderItems);
+    order.setTotalAmount(subtotal.add(shippingCost));
 
 		Order savedOrder = orderRepository.save(order);
 
     // Save order items, that already have their order set
     orderItemRepository.saveAll(orderItems);
 
-    // log.info("Order saved successfully. Order ID: {}", savedOrder.getId());
-    // log.info("Clearing cart for user ID: {}", userId);
-
 		cartService.clearCart(userId);
-
-    // log.info("Sending order confirmation email to user: {}", user.getEmail());
 
 		try{
 			emailService.sendOrderConfirmation(savedOrder);
-      // log.info("Order confirmation email sent successfully");
 		}catch (MailException e){
-      // log.error("Failed to send order confirmation email", e);
       throw new IllegalStateException("Failed to send order confirmation email");
 		}
-
-
-    // OrderDto orderDto = orderMapper.entityToDto(savedOrder);
-
-    // List<OrderItemDto> orderItemDtos = savedOrder.getOrderItems().stream()
-    //   .map(orderItem -> {
-    //     OrderItemDto orderItemDto = new OrderItemDto();
-    //     orderItemDto.setId(orderItem.getId());
-    //     orderItemDto.setOrderId(savedOrder.getId());
-    //     orderItemDto.setProductId(orderItem.getProduct().getId());
-    //     orderItemDto.setQuantity(orderItem.getQuantity());
-    //     orderItemDto.setPrice(orderItem.getPrice());
-    //     return orderItemDto;
-    //   })
-    //   .collect(Collectors.toList());
-    // orderDto.setOrderItems(orderItemDtos);
-
-    // return orderDto;
 
 		return orderMapper.entityToDto(savedOrder);
 	}
 
 	private List<OrderItem> createOrderItems(Cart cart, Order order){
-		// log.info("Creating order items from cart items. Cart items count: {}",
-			// cart.getCartItems().size());
-
 		return cart.getCartItems().stream().map(cartItem -> {
-			// log.info("Processing cart item for product ID: {}",
-				// cartItem.getProduct().getId());
 
 			Product product = productRepository.findById(cartItem.getProduct().getId())
 				.orElseThrow(() -> {
-					// log.error("Product not found in database. ID: {}",
-						// cartItem.getProduct().getId());
 					return new EntityNotFoundException("Product not found with id: " + cartItem.getProduct().getId());
 				});
-
-			// log.info("Found product in database - ID: {}, Name: {}, Price: {}, Stock: {}",
-				// product.getId(),
-				// product.getName(),
-				// product.getPrice(),
-				// product.getTotalStock());
 
 			if(product.getPrice() == null){
 				throw new IllegalStateException("Price is not set for product "+product.getName());
@@ -153,18 +100,10 @@ public class OrderService {
 			if(product.getTotalStock() < cartItem.getQuantity()){
 				throw new InsufficientStockException("Not enough stock for product "+product.getName());
 			}
-      // log.info("Updating product stock. Current stock: {}, Quantity to subtract: {}",
-        // product.getTotalStock(), cartItem.getQuantity());
 
 			product.setTotalStock(product.getTotalStock() - cartItem.getQuantity());
 
-      // log.info("Saving updated product stock to database");
-
       productRepository.save(product);
-
-      // log.info("Product stock updated successfully. New stock: {}", product.getTotalStock());
-
-      // log.info("Creating order item for product ID: {}", product.getId());
 
 			return OrderItem.builder()
 				.order(order)
@@ -176,7 +115,7 @@ public class OrderService {
 		}).toList();
 	}
 
-  private BigDecimal calculateTotalAmount(List<OrderItem> orderItems) {
+  private BigDecimal calculateSubtotal(List<OrderItem> orderItems) {
     return orderItems.stream()
       .map(item -> item.getPrice().multiply(new BigDecimal(item.getQuantity())))
       .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -206,5 +145,16 @@ public class OrderService {
 		order.setStatus(status);
 		Order updatedOrder = orderRepository.save(order);
 		return orderMapper.entityToDto(updatedOrder);
+	}
+
+	public List<OrderItemDto> getOrderItemsByOrderId(Long orderId) {
+    // Check if the order exists
+		orderRepository.findById(orderId)
+			.orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+		List<OrderItem> orderItems = orderItemRepository.findByOrderId(orderId);
+		return orderItems.stream()
+			.map(orderItemMapper::entityToDto)
+			.collect(Collectors.toList());
 	}
 }

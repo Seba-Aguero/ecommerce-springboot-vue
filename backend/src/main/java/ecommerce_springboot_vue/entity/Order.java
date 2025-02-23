@@ -2,16 +2,11 @@ package ecommerce_springboot_vue.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-// import java.util.ArrayList;
-// import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 
-// import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-// import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,7 +17,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-// import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -70,11 +64,6 @@ public class Order {
   public enum OrderStatus {
     PREPARING, DELIVERING, DELIVERED, CANCELED
   }
-
-  // @JsonManagedReference
-  // @Default
-  // @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-  // private List<OrderItem> orderItems = new ArrayList<>();
 
   @Default
   @CreationTimestamp

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import ecommerce_springboot_vue.dto.OrderDto;
+import ecommerce_springboot_vue.dto.OrderItemDto;
 import ecommerce_springboot_vue.dto.request.order.CreateOrderRequest;
 import ecommerce_springboot_vue.dto.request.order.UpdateOrderStatusRequest;
 import ecommerce_springboot_vue.service.OrderService;
@@ -68,5 +69,12 @@ public class OrderController {
       request.getStatus()
     );
     return ResponseEntity.ok(updatedOrderDto);
+  }
+
+  @GetMapping("/{orderId}/items")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<List<OrderItemDto>> getOrderItems(@PathVariable Long orderId) {
+    List<OrderItemDto> orderItems = orderService.getOrderItemsByOrderId(orderId);
+    return ResponseEntity.ok(orderItems);
   }
 }
