@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import ecommerce_springboot_vue.dto.request.user.ChangePasswordRequest;
 import ecommerce_springboot_vue.dto.request.user.LoginRequest;
+import ecommerce_springboot_vue.dto.request.user.EmailConfirmationRequest;
 import ecommerce_springboot_vue.dto.response.AuthResponse;
 import ecommerce_springboot_vue.entity.Cart;
 import ecommerce_springboot_vue.entity.User;
@@ -99,15 +100,23 @@ public class AuthService {
     userRepository.save(user);
   }
 
-  public void confirmEmail(String email, String confirmationCode){
-    User user = userService.getUserByEmail(email);
+  public AuthResponse confirmEmail(EmailConfirmationRequest request){
+    User user = userService.getUserByEmail(request.getEmail());
     if (user.isEmailConfirmation()) {
       throw new BadCredentialsException("User has already confirmed their email");
     }
-    if(user.getConfirmationCode() != null && user.getConfirmationCode().equals(confirmationCode)){
+
+    if(user.getConfirmationCode() != null && user.getConfirmationCode().equals(request.getConfirmationCode())){
       user.setEmailConfirmation(true);
       user.setConfirmationCode(null);
       userRepository.save(user);
+
+      // Login after confirmation
+      LoginRequest loginRequest = LoginRequest.builder()
+        .email(request.getEmail())
+        .password(request.getPassword())
+        .build();
+      return login(loginRequest);
     }
     else{
       throw new BadCredentialsException("Invalid confirmation code");

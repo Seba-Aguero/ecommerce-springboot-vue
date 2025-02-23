@@ -12,13 +12,8 @@ export const authService = {
   },
 
   async confirmEmail(data) {
-    await api.post("/api/v1/auth/confirm-email", data);
-    return true;
-  },
-
-  async resendConfirmationCode(email) {
-    await api.post("/api/v1/auth/resend-confirmation", { email });
-    return true;
+    const response = await api.post("/api/v1/auth/confirm-email", data);
+    return response.data;
   },
 
   async fetchUserProfile() {

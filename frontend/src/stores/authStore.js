@@ -5,16 +5,23 @@ export const useAuthStore = defineStore("auth", {
   state: () => ({
     user: null,
     token: localStorage.getItem("token") || null,
+    loading: false,
+    tempUserData: null, // For storing temporary user data during registration
   }),
 
   getters: {
     isAuthenticated: (state) => !!state.token,
-    userEmail: (state) => (state.user ? state.user.email : ""),
+    userEmail: (state) => (state.tempUserData?.email || (state.user ? state.user.email : "")),
     userRole: (state) => (state.user ? state.user.role : ""),
   },
 
   actions: {
+    setTempUserData(data) {
+      this.tempUserData = data;
+    },
+
     async login(credentials) {
+      this.loading = true;
       try {
         const data = await authService.login(credentials);
         this.token = data.token;
@@ -23,16 +30,20 @@ export const useAuthStore = defineStore("auth", {
         return true;
       } catch (error) {
         throw new Error(error.response?.data?.message || "Login failed");
+      } finally {
+        this.loading = false;
       }
     },
 
     async register(userData) {
+      this.loading = true;
       try {
         const data = await authService.register(userData);
-        this.user = data;
         return true;
       } catch (error) {
         throw new Error(error.response?.data?.message || "Registration failed");
+      } finally {
+        this.loading = false;
       }
     },
 
@@ -43,20 +54,28 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async confirmEmail(data) {
+      this.loading = true;
       try {
-        await authService.confirmEmail(data);
-        return true;
-      } catch (error) {
-        throw new Error(error.response?.data?.message || "Error confirming email");
-      }
-    },
+        const response = await authService.confirmEmail(data);
+        this.token = response.token;
+        this.user = response.user;
+        localStorage.setItem("token", this.token);
 
-    async resendConfirmationCode(email) {
-      try {
-        await authService.resendConfirmationCode(email);
-        return true;
+        // Clear temporary user data after successful confirmation
+        this.tempUserData = null;
+
+        if (!this.isAuthenticated) {
+          throw new Error("Authentication failed after confirmation");
+        }
+
+        return response;
       } catch (error) {
-        throw new Error(error.response?.data?.message || "Error resending code");
+        this.token = null;
+        this.user = null;
+        localStorage.removeItem("token");
+        throw new Error(error.response?.data?.message || "Error confirming email");
+      } finally {
+        this.loading = false;
       }
     },
 
@@ -65,7 +84,6 @@ export const useAuthStore = defineStore("auth", {
         const data = await authService.fetchUserProfile();
         this.user = data;
       } catch (error) {
-        console.error("Fetch profile error:", error);
         throw error;
       }
     },

@@ -31,10 +31,10 @@
         <div class="mt-9">
           <button
             type="submit"
-            :disabled="loading || !email || !password"
+            :disabled="authStore.loading || !email || !password"
             class="w-full bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 text-white font-semibold py-3 px-6 rounded-md transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center disabled:opacity-50"
           >
-            <ButtonSpinner v-if="loading"> Logging in... </ButtonSpinner>
+            <ButtonSpinner v-if="authStore.loading"> Logging in... </ButtonSpinner>
             <span class="flex items-center" v-else>
               Log In
               <ArrowRight class="ml-2 h-5 w-5" aria-hidden="true" />
@@ -77,10 +77,8 @@ const cartStore = useCartStore();
 const toast = useToast();
 const email = ref("");
 const password = ref("");
-const loading = ref(false);
 
 const handleLogin = async () => {
-  loading.value = true;
   try {
     await authStore.login({
       email: email.value,
@@ -91,8 +89,6 @@ const handleLogin = async () => {
     toast.success("Successfully logged in!");
   } catch (error) {
     toast.error("Invalid email or password");
-  } finally {
-    loading.value = false;
   }
 };
 </script>

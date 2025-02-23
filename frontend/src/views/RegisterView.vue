@@ -57,13 +57,13 @@
         <div class="mt-9">
           <button
             type="submit"
-            :disabled="
-              loading || (password && confirmPassword && password !== confirmPassword)
-            "
+            :disabled="authStore.loading || !email || !password || !confirmPassword"
             class="w-full bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 text-white font-semibold py-3 px-6 rounded-md transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center disabled:opacity-50"
           >
-            <ButtonSpinner v-if="loading"> Creating Account... </ButtonSpinner>
-            <span class="flex items-center" v-else>
+            <ButtonSpinner v-if="authStore.loading">
+              Creating account...
+            </ButtonSpinner>
+            <span v-else class="flex items-center">
               Create Account
               <ArrowRight class="ml-2 h-5 w-5" aria-hidden="true" />
             </span>
@@ -106,24 +106,26 @@ const lastName = ref("");
 const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
-const loading = ref(false);
 const error = ref("");
 
 const handleRegister = async () => {
-  loading.value = true;
-  error.value = ""; // Reset error message
   try {
     await authStore.register({
       email: email.value,
       password: password.value,
       confirmPassword: confirmPassword.value,
     });
+
+    // Store temporary user data for email confirmation
+    authStore.setTempUserData({
+      email: email.value,
+      password: password.value
+    });
+
     router.push("/confirm-email");
   } catch (e) {
     error.value = e.message || "Registration failed";
     toast.error(error.value);
-  } finally {
-    loading.value = false;
   }
 };
 </script>
