@@ -165,7 +165,6 @@ const addToCart = async () => {
     await cartStore.addToCart(productStore.currentProduct, quantity.value);
     toast.success("Product added to cart successfully!");
   } catch (error) {
-    console.error("Error adding to cart:", error);
     toast.error("Error adding product to cart");
   }
 };
