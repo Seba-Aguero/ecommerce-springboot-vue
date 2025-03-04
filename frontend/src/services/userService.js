@@ -1,37 +1,13 @@
-//TODO: Esto estaba mal. Cuando haga el userStore lo arreglo.
+import api from '@/services/api';
 
-//--------------------------------
+export const userService = {
+  async fetchProfile() {
+    const response = await api.get('/api/v1/users/profile');
+    return response.data;
+  },
 
-// import { useUserStore } from "@/stores/userStore";
-
-// export const userService = {
-//   async fetchProfile() {
-//     const userStore = useUserStore();
-//     try {
-//       const profile = await userStore.fetchProfile();
-//       return profile;
-//     } catch (error) {
-//       throw new Error("Error fetching profile: " + error.message);
-//     }
-//   },
-
-//   async updateProfile(userData) {
-//     const userStore = useUserStore();
-//     try {
-//       const updatedProfile = await userStore.updateProfile(userData);
-//       return updatedProfile;
-//     } catch (error) {
-//       throw new Error("Error updating profile: " + error.message);
-//     }
-//   },
-
-//   async changePassword(passwordData) {
-//     const userStore = useUserStore();
-//     try {
-//       await userStore.changePassword(passwordData);
-//       return true;
-//     } catch (error) {
-//       throw new Error("Error changing password: " + error.message);
-//     }
-//   },
-// };
+  async updateProfile(profileData) {
+    const response = await api.put('/api/v1/users/profile', profileData);
+    return response.data;
+  },
+};
