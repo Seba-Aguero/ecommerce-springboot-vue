@@ -10,6 +10,7 @@ import ecommerce_springboot_vue.dto.request.order.CreateOrderRequest;
 import ecommerce_springboot_vue.dto.request.order.UpdateOrderStatusRequest;
 import ecommerce_springboot_vue.service.OrderService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class OrderController {
 
   @PostMapping
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<OrderDto> createOrder(@RequestBody CreateOrderRequest request) {
+  public ResponseEntity<OrderDto> createOrder(@Valid @RequestBody CreateOrderRequest request) {
     OrderDto createrOrderDto = orderService.createOrder(
       request.getUserId(),
       request.getAddress(),
@@ -62,7 +63,7 @@ public class OrderController {
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<OrderDto> updateOrderStatus(
     @PathVariable Long orderId,
-    @RequestBody UpdateOrderStatusRequest request)
+    @Valid @RequestBody UpdateOrderStatusRequest request)
   {
     OrderDto updatedOrderDto = orderService.updateOrderStatus(
       orderId,

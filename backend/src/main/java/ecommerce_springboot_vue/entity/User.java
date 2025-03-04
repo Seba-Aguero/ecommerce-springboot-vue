@@ -42,10 +42,21 @@ public class User implements UserDetails {
 
   @NotBlank(message = "Email is required")
   @Email(message = "Invalid email format")
+  @Column(unique = true)
   private String email;
 
   @NotBlank(message = "Password is required")
   private String password;
+
+  private String firstName;
+
+  private String lastName;
+
+  private String phone;
+
+  private String address;
+
+  private boolean emailConfirmation;
 
   @Enumerated(EnumType.STRING)
   private Role role;
@@ -57,8 +68,6 @@ public class User implements UserDetails {
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
   private Cart cart;
-
-  private boolean emailConfirmation;
 
   private String confirmationCode;
 

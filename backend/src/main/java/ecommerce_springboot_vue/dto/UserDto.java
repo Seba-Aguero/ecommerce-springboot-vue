@@ -19,5 +19,13 @@ public class UserDto {
   @Email(message = "Invalid email format")
   private String email;
 
+  private String firstName;
+
+  private String lastName;
+
+  private String phone;
+
+  private String address;
+
   private User.Role role;
 }

@@ -18,6 +18,7 @@ import ecommerce_springboot_vue.dto.request.cart.AddCartItemRequest;
 import ecommerce_springboot_vue.enums.CartOperation;
 import ecommerce_springboot_vue.service.CartService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,7 +42,7 @@ public class CartController {
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<CartDto> addToCart(
     @PathVariable Long userId,
-    @RequestBody AddCartItemRequest request)
+    @Valid @RequestBody AddCartItemRequest request)
   {
     CartDto cartDto = cartService.addToCart(
       userId,

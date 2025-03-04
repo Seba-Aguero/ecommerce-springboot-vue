@@ -60,7 +60,7 @@ public class AuthService {
   @Transactional
   public User register(User user) {
     if(userRepository.findByEmail(user.getEmail()).isPresent()) {
-      throw new IllegalStateException("Email already taken");
+      throw new BadRequestException("Email already taken");
     }
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     user.setRole(user.getRole() == null ? User.Role.USER : user.getRole());

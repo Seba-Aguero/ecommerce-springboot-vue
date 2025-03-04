@@ -359,6 +359,10 @@ public class DataSeeder {
       .password("admin123")
       .role(User.Role.ADMIN)
       .emailConfirmation(true)
+      .firstName("Admin")
+      .lastName("User")
+      .phone("+1234567890")
+      .address("123 Admin Street, Tech City, 12345")
       .build();
 
     // Create normal users
@@ -367,6 +371,10 @@ public class DataSeeder {
       .password("user123")
       .role(User.Role.USER)
       .emailConfirmation(true)
+      .firstName("John")
+      .lastName("Doe")
+      .phone("+1987654321")
+      .address("456 User Avenue, Shopping District, 67890")
       .build();
 
     User user2 = User.builder()
@@ -374,6 +382,10 @@ public class DataSeeder {
       .password("user123")
       .role(User.Role.USER)
       .emailConfirmation(true)
+      .firstName("Jane")
+      .lastName("Smith")
+      .phone("+1122334455")
+      .address("789 Customer Road, Market Square, 13579")
       .build();
 
     //Here I use the authService to register the users and create a cart for each one

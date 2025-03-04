@@ -3,6 +3,7 @@ package ecommerce_springboot_vue.service;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import ecommerce_springboot_vue.dto.CartDto;
 import ecommerce_springboot_vue.dto.CartItemDto;
@@ -28,6 +30,7 @@ import ecommerce_springboot_vue.entity.CartItem;
 import ecommerce_springboot_vue.entity.Order;
 import ecommerce_springboot_vue.entity.Product;
 import ecommerce_springboot_vue.entity.User;
+import ecommerce_springboot_vue.exception.InsufficientStockException;
 import ecommerce_springboot_vue.mapper.CartMapper;
 import ecommerce_springboot_vue.mapper.OrderMapper;
 import ecommerce_springboot_vue.repository.IOrderItemRepository;
@@ -72,6 +75,8 @@ class OrderServiceTest {
 
   @BeforeEach
   void setUp() {
+    ReflectionTestUtils.setField(orderService, "shippingCost", new BigDecimal("10.00"));
+
     testUser = User.builder()
       .id(1L)
       .email("test@test.com")
@@ -130,6 +135,12 @@ class OrderServiceTest {
       .product(testProductDto)
       .quantity(2)
       .build());
+
+    // Subtotal (10 * 2) + shipping (10.00) = 30.00
+    BigDecimal expectedTotal = new BigDecimal("30.00");
+    testOrder.setTotalAmount(expectedTotal);
+    testOrderDto.setTotalAmount(expectedTotal);
+
     when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
     when(cartService.getCartByUserId(1L)).thenReturn(testCartDto);
     when(cartMapper.dtoToEntity(testCartDto)).thenReturn(testCart);
@@ -141,11 +152,35 @@ class OrderServiceTest {
 
     assertNotNull(result);
     assertEquals(testOrderDto.getAddress(), result.getAddress());
+    assertEquals(expectedTotal, result.getTotalAmount());
     verify(orderRepository).save(any(Order.class));
     verify(orderItemRepository).saveAll(anyList());
     verify(cartService).clearCart(1L);
     verify(emailService).sendOrderConfirmation(any(Order.class));
     verify(productRepository).findById(1L);
+  }
+
+  @Test
+  void createOrderWithInsufficientStockShouldThrowException() {
+    Product testProduct = Product.builder()
+      .id(1L)
+      .name("Test Product")
+      .price(BigDecimal.TEN)
+      .totalStock(1)
+      .build();
+    CartItem cartItem = CartItem.builder()
+      .product(testProduct)
+      .quantity(2)
+      .build();
+    testCart.getCartItems().add(cartItem);
+
+    when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
+    when(cartService.getCartByUserId(1L)).thenReturn(testCartDto);
+    when(cartMapper.dtoToEntity(testCartDto)).thenReturn(testCart);
+    when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
+
+    assertThrows(InsufficientStockException.class,
+      () -> orderService.createOrder(1L, "Test Address", "123456789"));
   }
 
   @Test
