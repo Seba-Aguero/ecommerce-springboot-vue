@@ -54,6 +54,7 @@
     <!-- Clear Filters -->
     <button
       @click="handleClearFilters"
+      title="Remove all applied filters"
       class="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-300 flex items-center justify-center"
     >
       <RefreshCw class="h-4 w-4 mr-2" />

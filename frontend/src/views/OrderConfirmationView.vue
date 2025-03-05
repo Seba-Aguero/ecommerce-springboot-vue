@@ -49,6 +49,7 @@
 
         <router-link
           to="/products"
+          title="Browse more products"
           class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-base font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
         >
           <ShoppingBag class="h-5 w-5 mr-2" aria-hidden="true" />
@@ -63,6 +64,7 @@
         Need help?
         <a
           href="#"
+          title="Get help with your order"
           class="text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300"
         >
           Contact our support team

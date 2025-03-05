@@ -136,6 +136,7 @@
               <div class="flex justify-end mt-9">
                 <button
                   type="submit"
+                  title="Continue to payment"
                   class="bg-primary-600 text-white px-6 py-2 rounded-md hover:bg-primary-700"
                 >
                   Continue to Payment
@@ -193,6 +194,7 @@
               <button
                 type="button"
                 @click="currentStep--"
+                title="Return to previous step"
                 class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 flex items-center gap-x-1"
               >
                 <ChevronLeft class="h-4 w-4" />
@@ -200,6 +202,7 @@
               </button>
               <button
                 type="submit"
+                title="Review your order details"
                 class="bg-primary-600 text-white px-6 py-2 rounded-md hover:bg-primary-700"
               >
                 Review Order
@@ -247,6 +250,7 @@
               <button
                 type="button"
                 @click="currentStep--"
+                title="Return to previous step"
                 class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 flex items-center gap-x-1"
               >
                 <ChevronLeft class="h-4 w-4" />
@@ -255,6 +259,7 @@
               <button
                 @click="placeOrder"
                 :disabled="loading"
+                :title="loading ? 'Processing your order...' : 'Complete your purchase'"
                 class="bg-primary-600 text-white px-6 py-2 rounded-md hover:bg-primary-700 disabled:opacity-50 flex items-center justify-center"
               >
                 <ButtonSpinner v-if="loading"> Processing Order... </ButtonSpinner>

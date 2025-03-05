@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen bg-slate-50 dark:bg-gray-900 transition-colors duration-200"
+    class="min-h-screen bg-slate-100 dark:bg-gray-900 transition-colors duration-200"
   >
     <Navbar />
     <main class="transition-colors duration-200">

@@ -67,8 +67,13 @@
               </div>
               <button
                 @click="addToCart"
-                class="flex-1 bg-primary-600 text-white px-6 py-2 rounded-md hover:bg-primary-700 transition-colors"
                 :disabled="!isProductAvailable || quantity <= 0"
+                :title="
+                  isProductAvailable
+                    ? `Add ${quantity === 1 ? 'item' : 'items'} to cart`
+                    : 'Product is out of stock'
+                "
+                class="flex-1 bg-primary-600 text-white px-6 py-2 rounded-md hover:bg-primary-700 transition-colors"
               >
                 {{ isProductAvailable ? "Add to Cart" : "Out of Stock" }}
               </button>
@@ -97,7 +102,7 @@ import { useProductStore } from "@/stores/productStore";
 import { useCartStore } from "@/stores/cartStore";
 import LoadingSpinner from "@/components/common/LoadingSpinner.vue";
 import { useToast } from "vue-toastification";
-import { formatPrice } from '@/utils/formatters';
+import { formatPrice } from "@/utils/formatters";
 
 const route = useRoute();
 const toast = useToast();

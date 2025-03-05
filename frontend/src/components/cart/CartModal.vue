@@ -17,6 +17,7 @@
         <button
           @click="$emit('close')"
           class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition duration-0"
+          title="Close cart"
         >
           <X class="h-6 w-6" aria-hidden="true" />
         </button>
@@ -66,6 +67,7 @@
               <img
                 :src="item.imageUrl"
                 :alt="item.name"
+                :title="item.name"
                 class="w-16 h-16 object-cover rounded cursor-pointer"
                 v-image-fallback
                 @click="router.push(`/product/${item.id}`)"
@@ -81,6 +83,7 @@
                     <button
                       @click="handleDecrementQuantity(item.id)"
                       :disabled="item.quantity <= 1"
+                      :title="item.quantity <= 1 ? 'Minimum quantity reached' : 'Decrease quantity'"
                       class="text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-50 duration-0 disabled:opacity-40"
                     >
                       <Minus class="h-4 w-4" aria-hidden="true" />
@@ -91,6 +94,7 @@
                     <button
                       @click="handleIncrementQuantity(item.id)"
                       :disabled="item.quantity >= item.totalStock"
+                      :title="item.quantity >= item.totalStock ? 'Maximum stock reached' : 'Increase quantity'"
                       class="text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-50 duration-0 disabled:opacity-40"
                     >
                       <Plus class="h-4 w-4" aria-hidden="true" />
@@ -103,6 +107,7 @@
                   <button
                     @click="handleRemoveFromCart(item.id)"
                     class="text-red-500 hover:text-red-400 duration-0"
+                    title="Remove item from cart"
                   >
                     <Trash2 class="h-4 w-4" aria-hidden="true" />
                   </button>
@@ -142,13 +147,17 @@
           <div class="flex gap-x-2">
             <button
               @click="handleCheckout"
-              class="bg-primary-600 text-white w-[70%] md:w-3/4 px-2 py-1 md:px-4 md:py-2 rounded hover:bg-primary-700 flex items-center gap-x-2 justify-center"
+              :disabled="!cartStore.items.length"
+              class="bg-primary-600 text-white w-[70%] md:w-3/4 px-2 py-1 md:px-4 md:py-2 rounded hover:bg-primary-700 flex items-center gap-x-2 justify-center disabled:opacity-40"
+              title="Proceed to checkout"
             >
               <CreditCard class="h-4 w-4" aria-hidden="true" /> Checkout
             </button>
             <button
               @click="showClearConfirmation = true"
-              class="bg-red-700 text-white w-[30%] md:w-1/4 px-1 py-1 md:px-2 rounded hover:bg-red-800 flex items-center gap-x-2 justify-center"
+              :disabled="!cartStore.items.length"
+              class="bg-red-700 text-white w-[30%] md:w-1/4 px-1 py-1 md:px-2 rounded hover:bg-red-800 flex items-center gap-x-2 justify-center disabled:opacity-40"
+              title="Clear all items from cart"
             >
               <Trash2 class="h-4 w-4" aria-hidden="true" /> Clear
             </button>
