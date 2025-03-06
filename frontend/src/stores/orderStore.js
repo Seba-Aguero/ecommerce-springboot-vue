@@ -4,14 +4,19 @@ import { orderService } from "@/services/orderService";
 export const useOrderStore = defineStore("orders", {
   state: () => ({
     orders: [],
+    orderItems: {},
     currentOrder: null,
     loading: false,
+    loadingItems: false,
     error: null,
     lastOrderCompleted: false,
   }),
 
   getters: {
     isOrderCompleted: (state) => state.lastOrderCompleted && state.currentOrder !== null,
+    getItemsForOrder: (state) => (orderId) => {
+      return state.orderItems[orderId] || [];
+    },
   },
 
   actions: {
@@ -32,6 +37,7 @@ export const useOrderStore = defineStore("orders", {
 
     async fetchUserOrders(userId) {
       this.loading = true;
+      this.error = null;
       try {
         const response = await orderService.fetchUserOrders(userId);
         this.orders = response.data;
@@ -40,6 +46,21 @@ export const useOrderStore = defineStore("orders", {
         throw error;
       } finally {
         this.loading = false;
+      }
+    },
+
+    async fetchOrderItems(orderId) {
+      // If the order items are already fetched, don't fetch them again
+      if (this.orderItems[orderId]) return;
+
+      this.loadingItems = true;
+      try {
+        const response = await orderService.getOrderItems(orderId);
+        this.orderItems[orderId] = response.data;
+      } catch (error) {
+        this.orderItems[orderId] = [];
+      } finally {
+        this.loadingItems = false;
       }
     },
 

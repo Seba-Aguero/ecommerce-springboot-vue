@@ -4,7 +4,7 @@
       <div class="flex justify-between h-16">
         <!-- Logo -->
         <div class="flex items-center">
-          <router-link to="/" class="flex items-center" aria-label="Home">
+          <router-link to="/" class="flex items-center" aria-label="Home" title="Go to homepage">
             <ShoppingBag class="h-8 w-8 text-primary-500" aria-hidden="true" />
             <span
               class="ml-2 text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-purple-600"
@@ -32,6 +32,7 @@
             v-if="authStore.isAuthenticated"
             @click="isCartOpen = true"
             class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium relative"
+            title="View your shopping cart"
             aria-label="Cart"
           >
             <ShoppingCart class="h-5 w-5 inline-block no-transition" aria-hidden="true" />
@@ -46,29 +47,56 @@
           <!-- Desktop Auth Menu -->
           <div v-if="authStore.isAuthenticated" class="relative">
             <button
-              @click="isMenuOpen = !isMenuOpen"
+              @click="isProfileMenuOpen = !isProfileMenuOpen"
               class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium flex items-center"
+              :title="isProfileMenuOpen ? 'Close user menu' : 'Open user menu'"
               aria-label="User Menu"
             >
-              <User class="h-5 w-5 mr-1 no-transition" aria-hidden="true" />
+              <div class="relative w-5 h-5">
+                <User
+                  class="h-5 w-5 absolute transition-all duration-200 ease-in-out"
+                  :class="
+                    isProfileMenuOpen ? 'opacity-0 rotate-90' : 'opacity-100 rotate-0'
+                  "
+                  aria-hidden="true"
+                />
+                <X
+                  class="h-5 w-5 absolute transition-all duration-200 ease-in-out"
+                  :class="
+                    isProfileMenuOpen ? 'opacity-100 rotate-0' : 'opacity-0 -rotate-90'
+                  "
+                  aria-hidden="true"
+                />
+              </div>
             </button>
 
             <div
-              v-show="isMenuOpen"
+              v-show="isProfileMenuOpen"
               class="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-slate-50 dark:bg-gray-700 ring-1 ring-black ring-opacity-5"
             >
               <router-link
                 to="/profile"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600"
-                @click="isMenuOpen = false"
+                @click="isProfileMenuOpen = false"
                 aria-label="My Profile"
+                title="View and edit your profile"
               >
                 My Profile
+              </router-link>
+              <router-link
+                to="/user-orders"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600"
+                @click="isProfileMenuOpen = false"
+                aria-label="My Orders"
+                title="View your order history"
+              >
+                My Orders
               </router-link>
               <button
                 @click="handleLogout"
                 class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600"
                 aria-label="Log Out"
+                title="Sign out of your account"
               >
                 Log Out
               </button>
@@ -81,6 +109,7 @@
               to="/login"
               class="px-4 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-white border border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
               aria-label="Log In"
+              title="Sign in to your account"
             >
               Log In
             </router-link>
@@ -88,6 +117,7 @@
               to="/register"
               class="px-4 py-2 rounded-md text-sm font-medium text-white bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
               aria-label="Sign Up"
+              title="Create a new account"
             >
               Sign Up
             </router-link>
@@ -112,6 +142,7 @@
             v-if="authStore.isAuthenticated"
             @click="isCartOpen = true"
             class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium relative"
+            title="View your shopping cart"
             aria-label="Cart"
           >
             <ShoppingCart class="h-5 w-5 inline-block no-transition" aria-hidden="true" />
@@ -127,6 +158,7 @@
           <button
             @click="isMobileMenuOpen = !isMobileMenuOpen"
             class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-800 dark:text-gray-200 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
+            :title="isMobileMenuOpen ? 'Close menu' : 'Open menu'"
             aria-label="Open main menu"
           >
             <Menu v-if="!isMobileMenuOpen" class="block h-6 w-6" aria-hidden="true" />
@@ -146,13 +178,24 @@
             class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
             @click="isMobileMenuOpen = false"
             aria-label="My Profile"
+            title="View and edit your profile"
           >
             My Profile
+          </router-link>
+          <router-link
+            to="/user-orders"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+            @click="isMobileMenuOpen = false"
+            aria-label="My Orders"
+            title="View your order history"
+          >
+            My Orders
           </router-link>
           <button
             @click="handleLogout"
             class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
             aria-label="Log Out"
+            title="Sign out of your account"
           >
             Log Out
           </button>
@@ -196,7 +239,7 @@ const router = useRouter();
 const authStore = useAuthStore();
 const cartStore = useCartStore();
 const themeStore = useThemeStore();
-const isMenuOpen = ref(false);
+const isProfileMenuOpen = ref(false);
 const isMobileMenuOpen = ref(false);
 const isCartOpen = ref(false);
 
@@ -209,7 +252,7 @@ const toggleTheme = () => {
 const handleLogout = async () => {
   try {
     await authStore.logout();
-    isMenuOpen.value = false;
+    isProfileMenuOpen.value = false;
     isMobileMenuOpen.value = false;
     router.push("/login");
   } catch (error) {
