@@ -51,22 +51,14 @@ A modern e-commerce platform built with Spring Boot and Vue.js, featuring JWT au
 - Spring Security with JWT
 - Spring Data JPA
 - PostgreSQL Database
-- Maven for dependency management
 - JUnit and Mockito for testing
-- Swagger/OpenAPI for documentation
-- Lombok for boilerplate reduction
-- MapStruct for object mapping
 
 ### Frontend
 - Vue.js 3.5.13 with Composition API
 - Vite 6.0.11 for build tooling
 - Pinia for state management
-- Vue Router for navigation
+- Vitest for unit testing
 - TailwindCSS 3.4.17 for styling
-- Lucide icons
-- Vue Toastification
-- VeeValidate + Zod
-- Axios for HTTP requests
 
 ## 📋 Prerequisites
 
@@ -152,6 +144,7 @@ ecommerce-springboot-vue/
         ├── router/
         ├── services/
         ├── stores/
+        │   ├── __tests__/
         ├── utils/
         └── views/
 ```
@@ -202,3 +195,7 @@ ecommerce-springboot-vue/
 - `GET /api/v1/users/profile` - Get user profile
 - `PUT /api/v1/users/profile` - Update user profile
 - `GET /api/v1/users/role` - Get user role
+
+## Author
+
+Sebastián Agüero
