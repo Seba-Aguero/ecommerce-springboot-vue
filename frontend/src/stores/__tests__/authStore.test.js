@@ -18,7 +18,7 @@ describe("Auth Store", () => {
   };
 
   beforeEach(() => {
-    localStorage.clear();
+    sessionStorage.clear();
     vi.clearAllMocks();
     store = useAuthStore();
   });
@@ -46,7 +46,7 @@ describe("Auth Store", () => {
       expect(store.isAuthenticated).toBe(true);
       expect(store.token).toBe(mockResponse.token);
       expect(store.user).toEqual(mockResponse.user);
-      expect(localStorage.getItem("token")).toBe(mockResponse.token);
+      expect(sessionStorage.getItem("token")).toBe(mockResponse.token);
     });
 
     it("logout clears auth state", () => {
@@ -56,14 +56,14 @@ describe("Auth Store", () => {
         token: "test-token",
         user: mockUser
       });
-      localStorage.setItem("token", "test-token");
+      sessionStorage.setItem("token", "test-token");
 
       store.logout();
 
       expect(store.isAuthenticated).toBe(false);
       expect(store.token).toBeNull();
       expect(store.user).toBeNull();
-      expect(localStorage.getItem("token")).toBeNull();
+      expect(sessionStorage.getItem("token")).toBeNull();
     });
 
     it("handles login error correctly", async () => {

@@ -4,7 +4,7 @@ import { authService } from "@/services/authService";
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     user: null,
-    token: localStorage.getItem("token") || null,
+    token: sessionStorage.getItem("token") || null,
     loading: false,
     tempUserData: null, // For storing temporary user data during registration
   }),
@@ -26,7 +26,7 @@ export const useAuthStore = defineStore("auth", {
         const data = await authService.login(credentials);
         this.token = data.token;
         this.user = data.user;
-        localStorage.setItem("token", this.token);
+        sessionStorage.setItem("token", this.token);
         return true;
       } catch (error) {
         throw new Error(error.response?.data?.message || "Login failed");
@@ -50,7 +50,7 @@ export const useAuthStore = defineStore("auth", {
     async logout() {
         this.user = null;
         this.token = null;
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
     },
 
     async confirmEmail(data) {
@@ -59,7 +59,7 @@ export const useAuthStore = defineStore("auth", {
         const response = await authService.confirmEmail(data);
         this.token = response.token;
         this.user = response.user;
-        localStorage.setItem("token", this.token);
+        sessionStorage.setItem("token", this.token);
 
         // Clear temporary user data after successful confirmation
         this.tempUserData = null;
@@ -72,7 +72,7 @@ export const useAuthStore = defineStore("auth", {
       } catch (error) {
         this.token = null;
         this.user = null;
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
         throw new Error(error.response?.data?.message || "Error confirming email");
       } finally {
         this.loading = false;
