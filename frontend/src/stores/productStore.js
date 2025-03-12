@@ -155,7 +155,11 @@ export const useProductStore = defineStore("products", {
         maxPrice: null,
         search: "",
       };
-      await this.fetchProducts();
+      try {
+        await this.fetchProducts();
+      } catch (error) {
+        this.error = error.message;
+      }
     },
   },
 });
