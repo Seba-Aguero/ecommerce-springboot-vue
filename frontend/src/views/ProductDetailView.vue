@@ -67,15 +67,17 @@
               </div>
               <button
                 @click="addToCart"
-                :disabled="!isProductAvailable || quantity <= 0"
+                :disabled="!isProductAvailable || quantity <= 0 || authStore.isAdmin"
                 :title="
-                  isProductAvailable
-                    ? `Add ${quantity === 1 ? 'item' : 'items'} to cart`
-                    : 'Product is out of stock'
+                  authStore.isAdmin
+                    ? 'Administrators cannot add products to cart'
+                    : isProductAvailable
+                      ? `Add ${quantity === 1 ? 'item' : 'items'} to cart`
+                      : 'Product is out of stock'
                 "
-                class="flex-1 bg-primary-600 text-white px-6 py-2 rounded-md hover:bg-primary-700 transition-colors"
+                class="flex-1 bg-primary-600 text-white px-6 py-2 rounded-md hover:bg-primary-700 transition-colors disabled:opacity-50"
               >
-                {{ isProductAvailable ? "Add to Cart" : "Out of Stock" }}
+                {{ authStore.isAdmin ? "Admin Mode" : isProductAvailable ? "Add to Cart" : "Out of Stock" }}
               </button>
             </div>
           </div>
@@ -100,6 +102,7 @@ import { ref, onMounted, computed } from "vue";
 import { useRoute, onBeforeRouteUpdate } from "vue-router";
 import { useProductStore } from "@/stores/productStore";
 import { useCartStore } from "@/stores/cartStore";
+import { useAuthStore } from "@/stores/authStore";
 import LoadingSpinner from "@/components/common/LoadingSpinner.vue";
 import { useToast } from "vue-toastification";
 import { formatPrice } from "@/utils/formatters";
@@ -108,6 +111,7 @@ const route = useRoute();
 const toast = useToast();
 const productStore = useProductStore();
 const cartStore = useCartStore();
+const authStore = useAuthStore();
 const quantity = ref(1);
 
 onBeforeRouteUpdate(async (to, from) => {
@@ -147,6 +151,11 @@ const validateQuantity = () => {
 };
 
 const addToCart = async () => {
+  if (authStore.isAdmin) {
+    toast.error("Administrators cannot add products to cart. Please use a customer account.");
+    return;
+  }
+
   if (!productStore.currentProduct) {
     toast.error("Product not available");
     return;

@@ -16,12 +16,24 @@ export const useCartStore = defineStore("cart", {
   },
 
   actions: {
+    // Helper function to check if user is admin
+    checkAdminRestriction(actionName) {
+      const authStore = useAuthStore();
+      if (authStore.isAdmin) {
+        throw new Error(
+          `Administrators cannot ${actionName}. Please use a customer account.`
+        );
+      }
+    },
+
     setUserId() {
       const authStore = useAuthStore();
       this.userId = authStore.user?.id || null;
     },
 
     async addToCart(product, quantity = 1) {
+      this.checkAdminRestriction("add items to cart");
+
       try {
         await cartService.addToCart(this.userId, product.id, quantity);
         const existingItem = this.items.find((item) => item.id === product.id);
@@ -37,6 +49,8 @@ export const useCartStore = defineStore("cart", {
     },
 
     async removeFromCart(productId) {
+      this.checkAdminRestriction("remove items from cart");
+
       try {
         await cartService.removeFromCart(this.userId, productId);
         const index = this.items.findIndex((item) => item.id === productId);
@@ -50,6 +64,8 @@ export const useCartStore = defineStore("cart", {
     },
 
     async incrementQuantity(productId) {
+      this.checkAdminRestriction("modify cart");
+
       try {
         await cartService.incrementQuantity(this.userId, productId);
         const item = this.items.find((item) => item.id === productId);
@@ -63,6 +79,8 @@ export const useCartStore = defineStore("cart", {
     },
 
     async decrementQuantity(productId) {
+      this.checkAdminRestriction("modify cart");
+
       try {
         await cartService.decrementQuantity(this.userId, productId);
         const item = this.items.find((item) => item.id === productId);
@@ -76,6 +94,8 @@ export const useCartStore = defineStore("cart", {
     },
 
     async clearCart() {
+      this.checkAdminRestriction("clear cart");
+
       try {
         await cartService.clearCart(this.userId);
         this.items = [];

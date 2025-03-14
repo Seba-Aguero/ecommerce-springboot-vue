@@ -300,7 +300,7 @@
               </div>
             </div>
 
-            <div class="border-t pt-4 space-y-2">
+            <div class="border-t pt-2 space-y-2">
               <div class="flex justify-between text-sm">
                 <span class="text-gray-500 dark:text-gray-400">Subtotal</span>
                 <span class="font-medium text-gray-900 dark:text-white">
@@ -328,12 +328,13 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useCartStore } from "@/stores/cartStore";
 import { useOrderStore } from "@/stores/orderStore";
 import { useToast } from "vue-toastification";
 import { formatPrice } from "@/utils/formatters";
+import { useAuthStore } from "@/stores/authStore";
 import Input from "@/components/common/Input.vue";
 import Label from "@/components/common/Label.vue";
 import Select from "@/components/common/Select.vue";
@@ -355,6 +356,7 @@ const router = useRouter();
 const cartStore = useCartStore();
 const orderStore = useOrderStore();
 const toast = useToast();
+const authStore = useAuthStore();
 
 const loading = ref(false);
 
@@ -461,4 +463,16 @@ const states = [
   "WI",
   "WY",
 ];
+
+onMounted(() => {
+  if (authStore.isAdmin) {
+    toast.error("Administrators cannot access the checkout page");
+    router.push("/products");
+  }
+
+  if (!cartStore.items.length) {
+    toast.error("Your cart is empty");
+    router.push("/products");
+  }
+});
 </script>

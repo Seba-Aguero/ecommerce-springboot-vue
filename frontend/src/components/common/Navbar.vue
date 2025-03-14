@@ -29,7 +29,7 @@
 
           <!-- Cart -->
           <button
-            v-if="authStore.isAuthenticated"
+            v-if="authStore.isAuthenticated && !authStore.isAdmin"
             @click="isCartOpen = true"
             class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium relative"
             title="View your shopping cart"
@@ -139,7 +139,7 @@
 
           <!-- Cart for Mobile -->
           <button
-            v-if="authStore.isAuthenticated"
+            v-if="authStore.isAuthenticated && !authStore.isAdmin"
             @click="isCartOpen = true"
             class="text-gray-600 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium relative"
             title="View your shopping cart"

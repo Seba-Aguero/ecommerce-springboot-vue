@@ -83,4 +83,20 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+// Navigation guard to prevent admins from accessing customer-only routes
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore();
+
+  const customerOnlyRoutes = ["/checkout", "/order-confirmation"];
+
+  if (
+    authStore.isAdmin &&
+    customerOnlyRoutes.some((route) => to.path.startsWith(route))
+  ) {
+    next("/products");
+  } else {
+    next();
+  }
+});
+
 export default router;

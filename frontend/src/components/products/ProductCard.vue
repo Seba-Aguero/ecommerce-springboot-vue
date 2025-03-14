@@ -33,11 +33,11 @@
           </p>
           <button
             @click="$emit('view-product', product.id)"
-            :title="`View details for ${product.name}`"
+            :title="`${authStore.isAdmin ? 'View/Edit' : 'View details for'} ${product.name}`"
             class="mt-3 w-full bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 text-white font-medium py-2 px-4 rounded-md"
             aria-label="View Product"
           >
-            View Product
+            {{ authStore.isAdmin ? 'View/Edit' : 'View Product' }}
           </button>
         </div>
       </div>
@@ -46,7 +46,11 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '@/stores/authStore';
 import { formatPrice } from '@/utils/formatters';
+
+const authStore = useAuthStore();
+
 defineProps({
   product: {
     type: Object,
