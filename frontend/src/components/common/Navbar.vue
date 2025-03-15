@@ -4,7 +4,12 @@
       <div class="flex justify-between h-16">
         <!-- Logo -->
         <div class="flex items-center">
-          <router-link to="/" class="flex items-center" aria-label="Home" title="Go to homepage">
+          <router-link
+            to="/"
+            class="flex items-center"
+            aria-label="Home"
+            title="Go to homepage"
+          >
             <ShoppingBag class="h-8 w-8 text-primary-500" aria-hidden="true" />
             <span
               class="ml-2 text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-purple-600"
@@ -84,6 +89,17 @@
                 My Profile
               </router-link>
               <router-link
+                v-if="authStore.isAdmin"
+                to="/admin/products"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600"
+                @click="isProfileMenuOpen = false"
+                aria-label="Manage Products"
+                title="Manage store products"
+              >
+                Manage Products
+              </router-link>
+              <router-link
+                v-if="authStore.isUser"
                 to="/user-orders"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600"
                 @click="isProfileMenuOpen = false"
@@ -183,6 +199,17 @@
             My Profile
           </router-link>
           <router-link
+            v-if="authStore.isAdmin"
+            to="/admin/products"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+            @click="isMobileMenuOpen = false"
+            aria-label="Manage Products"
+            title="Manage store products"
+          >
+            Manage Products
+          </router-link>
+          <router-link
+            v-if="authStore.isUser"
             to="/user-orders"
             class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
             @click="isMobileMenuOpen = false"

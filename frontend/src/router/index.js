@@ -56,16 +56,15 @@ const routes = [
     component: () => import("@/views/ProfileView.vue"),
     meta: { requiresAuth: true },
   },
-  // {
-  //   path: "/about",
-  //   name: "about",
-  //   component: () => import("@/views/AboutView.vue"),
-  // },
-  // {
-  //   path: "/contact",
-  //   name: "contact",
-  //   component: () => import("@/views/ContactView.vue"),
-  // },
+  {
+    path: "/admin/products",
+    name: "ProductsManagement",
+    component: () => import("@/views/admin/ProductsManagement.vue"),
+    meta: {
+      requiresAuth: true,
+      requiresAdmin: true,
+    },
+  },
 ];
 
 const router = createRouter({

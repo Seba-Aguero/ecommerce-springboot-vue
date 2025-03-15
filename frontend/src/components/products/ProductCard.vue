@@ -33,11 +33,11 @@
           </p>
           <button
             @click="$emit('view-product', product.id)"
-            :title="`${authStore.isAdmin ? 'View/Edit' : 'View details for'} ${product.name}`"
+            :title="`View details of ${product.name}`"
             class="mt-3 w-full bg-gradient-to-r from-primary-500 to-purple-500 hover:from-primary-600 hover:to-purple-600 text-white font-medium py-2 px-4 rounded-md"
             aria-label="View Product"
           >
-            {{ authStore.isAdmin ? 'View/Edit' : 'View Product' }}
+            View Product
           </button>
         </div>
       </div>

@@ -67,17 +67,30 @@
               </div>
               <button
                 @click="addToCart"
-                :disabled="!isProductAvailable || quantity <= 0 || authStore.isAdmin"
+                :disabled="
+                  !isProductAvailable ||
+                  quantity <= 0 ||
+                  !authStore.isAuthenticated ||
+                  authStore.isAdmin
+                "
                 :title="
                   authStore.isAdmin
                     ? 'Administrators cannot add products to cart'
                     : isProductAvailable
-                      ? `Add ${quantity === 1 ? 'item' : 'items'} to cart`
-                      : 'Product is out of stock'
+                    ? `Add ${quantity === 1 ? 'item' : 'items'} to cart`
+                    : 'Product is out of stock'
                 "
                 class="flex-1 bg-primary-600 text-white px-6 py-2 rounded-md hover:bg-primary-700 transition-colors disabled:opacity-50"
               >
-                {{ authStore.isAdmin ? "Admin Mode" : isProductAvailable ? "Add to Cart" : "Out of Stock" }}
+                {{
+                  authStore.isAdmin
+                    ? "Admin Mode"
+                    : !authStore.isAuthenticated
+                    ? "Login to add to cart"
+                    : isProductAvailable
+                    ? "Add to Cart"
+                    : "Out of Stock"
+                }}
               </button>
             </div>
           </div>
@@ -152,7 +165,9 @@ const validateQuantity = () => {
 
 const addToCart = async () => {
   if (authStore.isAdmin) {
-    toast.error("Administrators cannot add products to cart. Please use a customer account.");
+    toast.error(
+      "Administrators cannot add products to cart. Please use a customer account."
+    );
     return;
   }
 
