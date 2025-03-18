@@ -1,5 +1,6 @@
 package ecommerce_springboot_vue.service;
 
+import ecommerce_springboot_vue.config.FileStorageConfig;
 import ecommerce_springboot_vue.dto.CategoryDto;
 import ecommerce_springboot_vue.dto.ProductDto;
 import ecommerce_springboot_vue.entity.Category;
@@ -8,8 +9,11 @@ import ecommerce_springboot_vue.exception.ResourceNotFoundException;
 import ecommerce_springboot_vue.mapper.ProductMapper;
 import ecommerce_springboot_vue.repository.ICategoryRepository;
 import ecommerce_springboot_vue.repository.IProductRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,6 +25,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -29,19 +34,29 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class ProductService {
   private final IProductRepository productRepository;
   private final ProductMapper productMapper;
   private final ICategoryRepository categoryRepository;
 
-  private static final String UPLOAD_DIR = "src/main/resources/static/images/";
+  private final FileStorageConfig fileStorageConfig;
+
+  @PostConstruct
+  public void init() {
+    try {
+      Files.createDirectories(Paths.get(fileStorageConfig.getDirectory()));
+    } catch (IOException e) {
+      throw new RuntimeException("No se pudo crear el directorio de imágenes");
+    }
+  }
 
   public ProductDto createProduct(ProductDto productDto, MultipartFile image) throws IOException{
     Product product = productMapper.dtoToEntity(productDto);
 
     if(image != null && !image.isEmpty()){
       String fileName = saveImage(image);
-      product.setImageUrl("/images/" + fileName);
+      product.setImageUrl(fileName);
     }
 
     Product savedProduct = productRepository.save(product);
@@ -76,7 +91,7 @@ public class ProductService {
 
     if(image != null && !image.isEmpty()){
       String fileName = saveImage(image);
-      existingProduct.setImageUrl("/images/" + fileName);
+      existingProduct.setImageUrl(fileName);
     }
 
     Product updatedProduct = productRepository.save(existingProduct);
@@ -132,11 +147,13 @@ public class ProductService {
     return productMapper.entityToDto(product);
   }
 
-  private String saveImage(MultipartFile image) throws IOException{
-    String fileName = UUID.randomUUID().toString()+"_"+image.getOriginalFilename();
-    Path path = Paths.get(UPLOAD_DIR + fileName);
-    Files.createDirectories(path.getParent());
-    Files.write(path, image.getBytes());
-    return fileName;
+  private String saveImage(MultipartFile image) throws IOException {
+    String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+    Path filePath = Paths.get(fileStorageConfig.getDirectory(), fileName);
+
+    Files.createDirectories(filePath.getParent());
+    Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+    return fileStorageConfig.getBaseUrl() + "/" + fileName;
   }
 }

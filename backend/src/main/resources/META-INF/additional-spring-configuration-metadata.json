@@ -13,5 +13,20 @@
     "name": "app.order.shipping-cost",
     "type": "java.lang.String",
     "description": "Shipping cost"
+  },
+  {
+    "name": "file.upload.directory",
+    "type": "java.lang.String",
+    "description": "A description for 'file.upload.directory'"
+  },
+  {
+    "name": "file.upload.baseUrl",
+    "type": "java.lang.String",
+    "description": "A description for 'file.upload.baseUrl'"
+  },
+  {
+    "name": "file.upload.baseUrl",
+    "type": "java.lang.String",
+    "description": "A description for 'file.upload.baseUrl'"
   }
 ]}

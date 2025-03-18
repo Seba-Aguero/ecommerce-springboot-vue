@@ -143,7 +143,7 @@ class AuthServiceTest {
     when(userRepository.findByEmail(existingUser.getEmail()))
       .thenReturn(Optional.of(existingUser));
 
-    assertThrows(IllegalStateException.class, () -> authService.register(existingUser));
+    assertThrows(BadRequestException.class, () -> authService.register(existingUser));
   }
 
   @Test

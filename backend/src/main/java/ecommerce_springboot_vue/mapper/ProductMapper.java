@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.HashSet;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -20,13 +21,22 @@ public class ProductMapper {
   private final CategoryMapper categoryMapper;
 
   public Product dtoToEntity(ProductDto dto) {
-    return modelMapper.map(dto, Product.class);
+    Product product = modelMapper.map(dto, Product.class);
+
+    // Ensure categories is never null
+    if (product.getCategories() == null) {
+      product.setCategories(new HashSet<>());
+    }
+
+    return product;
   }
 
   public ProductDto entityToDto(Product product) {
-    Set<CategoryDto> categories = product.getCategories().stream()
-      .map(categoryMapper::entityToDto)
-      .collect(Collectors.toSet());
+    Set<CategoryDto> categories = product.getCategories() != null
+      ? product.getCategories().stream()
+        .map(categoryMapper::entityToDto)
+        .collect(Collectors.toSet())
+      : new HashSet<>();
 
     ProductDto productDto = modelMapper.map(product, ProductDto.class);
     productDto.setCategories(categories);
