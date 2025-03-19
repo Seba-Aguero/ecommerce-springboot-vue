@@ -28,4 +28,5 @@ frontend/yarn-error.log*
 .classpath
 
 # Uploaded files
-backend/uploads/products/*
+backend/src/main/resources/static/uploads/products/*
+!backend/src/main/resources/static/uploads/products/.gitkeep

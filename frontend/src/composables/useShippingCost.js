@@ -12,7 +12,7 @@ export function useShippingCost() {
       shippingCost.value = await configService.getShippingCost();
     } catch (err) {
       error.value = err;
-      console.error('Failed to fetch shipping cost:', err);
+      console.error("❌ Failed to fetch shipping cost:", err);
     } finally {
       loading.value = false;
     }

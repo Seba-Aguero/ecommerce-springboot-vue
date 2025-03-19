@@ -98,10 +98,15 @@ public class ProductService {
     return productMapper.entityToDto(updatedProduct);
   }
 
-  public void deleteProduct(Long id){
-    if(!productRepository.existsById(id)){
-      throw new ResourceNotFoundException("Product not found");
+  public void deleteProduct(Long id) {
+    Product product = productRepository.findById(id)
+      .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+
+    // Delete the image file if it exists
+    if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {
+      deleteImageFile(product.getImageUrl());
     }
+
     productRepository.deleteById(id);
   }
 
@@ -155,5 +160,21 @@ public class ProductService {
     Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
     return fileStorageConfig.getBaseUrl() + "/" + fileName;
+  }
+
+  private void deleteImageFile(String imageUrl) {
+    try {
+      // Extract filename from the URL
+      String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+      Path filePath = Paths.get(fileStorageConfig.getDirectory(), fileName);
+
+      // Delete the file if it exists
+      if (Files.exists(filePath)) {
+        Files.delete(filePath);
+        log.info("Deleted image file: {}", filePath);
+      }
+    } catch (IOException e) {
+      log.error("Failed to delete image file: {}", imageUrl, e);
+    }
   }
 }

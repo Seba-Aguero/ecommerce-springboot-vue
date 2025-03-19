@@ -96,7 +96,7 @@ onMounted(async () => {
     categories.value = categoryStore.categories;
     await productStore.fetchProducts({ page: 0 });
   } catch (error) {
-    console.error("Error loading initial data:", error);
+    console.error("❌ Error loading initial data:", error);
   } finally {
     loadingFilters.value = false;
   }

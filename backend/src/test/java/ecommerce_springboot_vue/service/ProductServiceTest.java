@@ -94,7 +94,7 @@ class ProductServiceTest {
 
   @Test
   void deleteProductSuccess() {
-    when(productRepository.existsById(1L)).thenReturn(true);
+    when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
 
     productService.deleteProduct(1L);
 

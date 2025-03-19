@@ -9,12 +9,22 @@ export const productService = {
     return await api.get(`/api/v1/products/${productId}`);
   },
 
-  async createProduct(productData) {
-    return await api.post("/api/v1/products", productData);
+  async createProduct(formData) {
+    const response = await api.post("/api/v1/products", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
   },
 
-  async updateProduct(productId, productData) {
-    return await api.put(`/api/v1/products/${productId}`, productData);
+  async updateProduct(id, formData) {
+    const response = await api.put(`/api/v1/products/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
   },
 
   async deleteProduct(productId) {

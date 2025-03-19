@@ -118,6 +118,55 @@ export const useProductStore = defineStore("products", {
       }
     },
 
+    async createProductWithImage(productData, image) {
+      try {
+        const formData = new FormData();
+        formData.append(
+          "product",
+          new Blob([JSON.stringify(productData)], {
+            type: "application/json",
+          })
+        );
+
+        if (image) {
+          formData.append("image", image);
+        }
+
+        const newProduct = await productService.createProduct(formData);
+        this.products.unshift(newProduct);
+        return newProduct;
+      } catch (error) {
+        throw new Error("Failed to create product: " + error.message);
+      }
+    },
+
+    async updateProductWithImage(id, productData, image) {
+      try {
+        const formData = new FormData();
+        formData.append(
+          "product",
+          new Blob([JSON.stringify(productData)], {
+            type: "application/json",
+          })
+        );
+
+        if (image) {
+          formData.append("image", image);
+        }
+
+        const updatedProduct = await productService.updateProduct(id, formData);
+
+        const index = this.products.findIndex((p) => p.id === id);
+        if (index !== -1) {
+          this.products[index] = updatedProduct;
+        }
+        return updatedProduct;
+      } catch (error) {
+        console.error("❌ Error en store:", error);
+        throw error;
+      }
+    },
+
     setFilters(filters) {
       this.filters = {
         ...this.filters,

@@ -29,12 +29,12 @@ const themeStore = useThemeStore();
 onMounted(async () => {
   themeStore.initTheme();
   // If there is a token, try to load the user profile
-  if (localStorage.getItem("token")) {
+  if (sessionStorage.getItem("token")) {
     try {
       await authStore.fetchUserProfile();
       cartStore.setUserId();
     } catch (error) {
-      console.error("Error fetching user profile:", error);
+      console.error("❌ Error fetching user profile:", error);
     }
   }
 });
@@ -67,3 +67,5 @@ onMounted(async () => {
   opacity: 0;
 }
 </style>
+
+
