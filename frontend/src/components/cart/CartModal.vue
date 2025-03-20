@@ -59,123 +59,50 @@
           <div class="px-4 overflow-y-auto h-[calc(100vh-180px)] custom-scrollbar">
             <div
               v-if="!cartStore.items.length"
-              class="text-center text-gray-500 dark:text-gray-400 mt-4"
+              class="text-center text-xl text-gray-500 dark:text-gray-400 mt-4"
             >
               Your cart is empty!
             </div>
 
             <div v-else>
-              <div
+              <CartItem
                 v-for="item in cartStore.items"
                 :key="item.id"
-                class="flex items-center gap-4 py-3 border-b dark:border-gray-700"
-              >
-                <img
-                  :src="item.imageUrl"
-                  :alt="item.name"
-                  :title="item.name"
-                  class="w-16 h-16 object-cover rounded cursor-pointer"
-                  v-image-fallback
-                  @click="router.push(`/product/${item.id}`)"
-                />
-                <div class="flex-1">
-                  <h3 class="text-sm font-medium text-gray-900 dark:text-white">
-                    {{ item.name }}
-                  </h3>
-                  <div class="flex items-center mt-2">
-                    <div
-                      class="flex items-center gap-3 border rounded-md px-2 py-1 border-gray-600"
-                    >
-                      <button
-                        @click="handleDecrementQuantity(item.id)"
-                        :disabled="item.quantity <= 1"
-                        :title="
-                          item.quantity <= 1
-                            ? 'Minimum quantity reached'
-                            : 'Decrease quantity'
-                        "
-                        class="text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-50 duration-0 disabled:opacity-40"
-                      >
-                        <Minus class="h-4 w-4" aria-hidden="true" />
-                      </button>
-                      <span class="text-sm text-gray-700 dark:text-gray-300">{{
-                        item.quantity
-                      }}</span>
-                      <button
-                        @click="handleIncrementQuantity(item.id)"
-                        :disabled="item.quantity >= item.totalStock"
-                        :title="
-                          item.quantity >= item.totalStock
-                            ? 'Maximum stock reached'
-                            : 'Increase quantity'
-                        "
-                        class="text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-50 duration-0 disabled:opacity-40"
-                      >
-                        <Plus class="h-4 w-4" aria-hidden="true" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex flex-col">
-                  <div class="flex justify-end">
-                    <button
-                      @click="handleRemoveFromCart(item.id)"
-                      class="text-red-500 hover:text-red-400 duration-0"
-                      title="Remove item from cart"
-                    >
-                      <Trash2 class="h-4 w-4" aria-hidden="true" />
-                    </button>
-                  </div>
-                  <div class="py-1">
-                    <p class="font-semibold text-gray-500 dark:text-gray-300 mt-2">
-                      ${{ formatPrice(item.price * item.quantity) }}
-                    </p>
-                  </div>
-                </div>
-              </div>
+                :item="item"
+                @increment="handleIncrementQuantity"
+                @decrement="handleDecrementQuantity"
+                @remove="handleRemoveFromCart"
+              />
             </div>
           </div>
 
           <!-- Total and footer buttons -->
           <div
-            class="absolute bottom-0 w-full p-4 border-t dark:border-gray-700 bg-white dark:bg-gray-800 flex flex-col gap-y-3"
+            class="absolute bottom-0 w-full p-4 border-t dark:border-gray-700 bg-white dark:bg-gray-800"
           >
-            <div class="flex justify-between text-sm">
-              <span class="text-gray-600 dark:text-gray-300">Subtotal:</span>
-              <span class="text-gray-900 dark:text-white"
-                >${{ formatPrice(cartStore.totalAmount) }}</span
-              >
-            </div>
-            <div class="flex justify-between text-sm mb-2">
-              <span class="text-gray-600 dark:text-gray-300">Shipping:</span>
-              <span class="text-gray-900 dark:text-white"
-                >${{ formatPrice(shippingCost) }}</span
-              >
-            </div>
-            <div class="flex justify-between font-semibold">
-              <span class="text-gray-600 dark:text-gray-300">Total:</span>
-              <span class="text-gray-900 dark:text-white"
-                >${{ formatPrice(cartStore.totalAmount + shippingCost) }}</span
-              >
-            </div>
-            <div class="flex gap-x-2">
-              <button
-                @click="handleCheckout"
-                :disabled="!cartStore.items.length"
-                class="bg-primary-600 text-white w-[70%] md:w-3/4 px-2 py-1 md:px-4 md:py-2 rounded hover:bg-primary-700 flex items-center gap-x-2 justify-center disabled:opacity-40"
-                title="Proceed to checkout"
-              >
-                <CreditCard class="h-4 w-4" aria-hidden="true" /> Checkout
-              </button>
-              <button
-                @click="showClearConfirmation = true"
-                :disabled="!cartStore.items.length"
-                class="bg-red-700 text-white w-[30%] md:w-1/4 px-1 py-1 md:px-2 rounded hover:bg-red-800 flex items-center gap-x-2 justify-center disabled:opacity-40"
-                title="Clear all items from cart"
-              >
-                <Trash2 class="h-4 w-4" aria-hidden="true" /> Clear
-              </button>
-            </div>
+            <CartSummary
+              :total-amount="cartStore.totalAmount"
+              :shipping-cost="shippingCost"
+            >
+              <div class="flex gap-x-2">
+                <button
+                  @click="handleCheckout"
+                  :disabled="!cartStore.items.length"
+                  class="bg-primary-600 text-white w-[70%] md:w-3/4 px-2 py-1 md:px-4 md:py-2 rounded hover:bg-primary-700 flex items-center gap-x-2 justify-center disabled:opacity-40"
+                  title="Proceed to checkout"
+                >
+                  <CreditCard class="h-4 w-4" aria-hidden="true" /> Checkout
+                </button>
+                <button
+                  @click="showClearConfirmation = true"
+                  :disabled="!cartStore.items.length"
+                  class="bg-red-700 text-white w-[30%] md:w-1/4 px-1 py-1 md:px-2 rounded hover:bg-red-800 flex items-center gap-x-2 justify-center disabled:opacity-40"
+                  title="Clear all items from cart"
+                >
+                  <Trash2 class="h-4 w-4" aria-hidden="true" /> Clear
+                </button>
+              </div>
+            </CartSummary>
           </div>
 
           <!-- Clear Confirmation Modal -->
@@ -202,15 +129,16 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { X, Trash2, Plus, Minus, CreditCard } from "lucide-vue-next";
+import { ref, computed } from "vue";
+import { X, Trash2, CreditCard } from "lucide-vue-next";
 import { useCartStore } from "@/stores/cartStore";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-import { formatPrice } from "@/utils/formatters";
 import ConfirmationModal from "@/components/common/ConfirmationModal.vue";
 import { useShippingCost } from "@/composables/useShippingCost";
 import { useAuthStore } from "@/stores/authStore";
+import CartItem from "@/components/cart/CartItem.vue";
+import CartSummary from "@/components/cart/CartSummary.vue";
 
 const router = useRouter();
 const cartStore = useCartStore();

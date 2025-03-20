@@ -53,16 +53,14 @@
           <!-- Quantity and Add to Cart -->
           <div class="mt-8">
             <div class="flex items-center gap-4">
-              <div class="w-24">
+              <div class="w-30 h-9">
                 <label for="quantity" class="sr-only">Quantity</label>
-                <input
-                  type="number"
-                  id="quantity"
-                  v-model.number="quantity"
-                  min="1"
+                <QuantityInput
+                  v-model="quantity"
+                  :min="1"
                   :max="computeMaxQuantity"
-                  @input="validateQuantity"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  :disabled="!isProductAvailable || !authStore.isAuthenticated || authStore.isAdmin"
+                  class="h-full"
                 />
               </div>
               <button
@@ -80,17 +78,9 @@
                     ? `Add ${quantity === 1 ? 'item' : 'items'} to cart`
                     : 'Product is out of stock'
                 "
-                class="flex-1 bg-primary-600 text-white px-6 py-2 rounded-md hover:bg-primary-700 transition-colors disabled:opacity-50"
+                class="flex-1 bg-primary-600 hover:bg-primary-700 text-white py-2 px-4 rounded-md disabled:opacity-50 disabled:cursor-not-allowed h-10"
               >
-                {{
-                  authStore.isAdmin
-                    ? "Admin Mode"
-                    : !authStore.isAuthenticated
-                    ? "Login to add to cart"
-                    : isProductAvailable
-                    ? "Add to Cart"
-                    : "Out of Stock"
-                }}
+                Add to Cart
               </button>
             </div>
           </div>
@@ -119,6 +109,7 @@ import { useAuthStore } from "@/stores/authStore";
 import LoadingSpinner from "@/components/common/LoadingSpinner.vue";
 import { useToast } from "vue-toastification";
 import { formatPrice } from "@/utils/formatters";
+import QuantityInput from "@/components/common/QuantityInput.vue";
 
 const route = useRoute();
 const toast = useToast();
